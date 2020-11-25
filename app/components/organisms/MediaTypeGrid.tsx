@@ -9,11 +9,10 @@ const images = [
   'assets/images/cassette.jpg',
 ];
 
-export default function MediaTypeGrid(): JSX.Element {
-  const [selectedImage, setSelectedImage] = useState<string>('');
+export default function MediaTypeGrid({ onSelection, selectedImage }): JSX.Element {
 
   function handleOnClick(src: string) {
-    setSelectedImage(src);
+    onSelection(src);
   }
 
   return (

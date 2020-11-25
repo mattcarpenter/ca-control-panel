@@ -6,6 +6,7 @@ const initialState = {
   mediaSelection: {
     albumArtImages: [],
     selectedAlbumArtImage: null,
+    selectedMediaTypeImage: null,
     artist: null,
     title: null,
   },
@@ -26,6 +27,9 @@ const controlPanelSlice = createSlice({
     },
     setMediaSelectionTitle: (state, action: PayloadAction<string | null>) => {
       state.mediaSelection.title = action.payload;
+    },
+    setMediaSelectionMediaTypeImage: (state, action: PayloadAction<string | null>) => {
+      state.mediaSelection.selectedMediaTypeImage = action.payload;
     }
   },
 });
@@ -35,6 +39,7 @@ export const {
   setSelectedAlbumArtImage,
   setMediaSelectionArtist,
   setMediaSelectionTitle,
+  setMediaSelectionMediaTypeImage,
 } = controlPanelSlice.actions;
 
 export default controlPanelSlice.reducer;
@@ -43,3 +48,4 @@ export const selectAlbumArtImages = (state: RootState) => state.controlPanel.med
 export const selectMediaSelectionSelectedAlbumArtImage = (state: RootState) => state.controlPanel.mediaSelection.selectedAlbumArtImage;
 export const selectMediaSelectionArtist = (state: RootState) => state.controlPanel.mediaSelection.artist;
 export const selectMediaSelectionTitle = (state: RootState) => state.controlPanel.mediaSelection.title;
+export const selectMediaSelectionSelectedMediaTypeImage = (state: RootState) => state.controlPanel.mediaSelection.selectedMediaTypeImage;

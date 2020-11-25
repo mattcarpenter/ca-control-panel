@@ -7,13 +7,21 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   selectAlbumArtImages,
   setSelectedAlbumArtImage,
+  selectMediaSelectionSelectedMediaTypeImage,
   setMediaSelectionArtist,
   setMediaSelectionTitle,
+  setMediaSelectionMediaTypeImage, selectMediaSelectionSelectedAlbumArtImage,
 } from '../../controlPanelSlice';
 import MediaTypeGrid from '../organisms/MediaTypeGrid';
 
 export default function ControlPanel(): JSX.Element {
   const albumArtImages = useSelector(selectAlbumArtImages);
+  const selectedMediaType = useSelector(
+    selectMediaSelectionSelectedMediaTypeImage
+  );
+  const selectedAlbumArt = useSelector(
+    selectMediaSelectionSelectedAlbumArtImage
+  );
   const dispatch = useDispatch();
 
   function handleAlbumArtSelection(img: string | null) {
@@ -29,6 +37,10 @@ export default function ControlPanel(): JSX.Element {
     dispatch(setMediaSelectionTitle(title));
   }
 
+  function handleMediaTypeSelection(img: string) {
+    dispatch(setMediaSelectionMediaTypeImage(img));
+  }
+
   return (
     <div className={styles.container}>
       <div className={styles.left}>
@@ -36,6 +48,7 @@ export default function ControlPanel(): JSX.Element {
           <AlbumArtGrid
             images={albumArtImages}
             onSelection={handleAlbumArtSelection}
+            selectedImage={selectedAlbumArt}
           />
         </div>
         <div className={styles.mediaSelectionFooter}>
@@ -44,7 +57,10 @@ export default function ControlPanel(): JSX.Element {
             onTitleChange={handleTitleChange}
           />
           <div className={styles.mediaSelectionAndCue}>
-            <MediaTypeGrid />
+            <MediaTypeGrid
+              onSelection={handleMediaTypeSelection}
+              selectedImage={selectedMediaType}
+            />
             <div className={styles.cueContainer}>
               <div>
                 <Button />

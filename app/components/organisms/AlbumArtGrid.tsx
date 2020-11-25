@@ -2,11 +2,9 @@ import React, { useState } from 'react';
 import styles from './AlbumArtGrid.css';
 import SelectableImage from '../molecules/SelectableImage';
 
-export default function AlbumArtGrid({ images, onSelection }): JSX.Element {
-  const [selectedImage, setSelectedImage] = useState<string | null>('');
+export default function AlbumArtGrid({ images, onSelection, selectedImage }): JSX.Element {
 
   function handleClick(src: string | null) {
-    setSelectedImage(src);
     onSelection(src);
   }
 
