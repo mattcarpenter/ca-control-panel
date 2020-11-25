@@ -10,9 +10,13 @@ import {
   selectMediaSelectionSelectedMediaTypeImage,
   setMediaSelectionArtist,
   setMediaSelectionTitle,
-  setMediaSelectionMediaTypeImage, selectMediaSelectionSelectedAlbumArtImage,
+  setMediaSelectionMediaTypeImage,
+  selectMediaSelectionSelectedAlbumArtImage,
 } from '../../controlPanelSlice';
 import MediaTypeGrid from '../organisms/MediaTypeGrid';
+import RendererProcessBridge from '../../lib/rendererProcessBridge';
+
+const renderProcessBridge = RendererProcessBridge.getInstance();
 
 export default function ControlPanel(): JSX.Element {
   const albumArtImages = useSelector(selectAlbumArtImages);
@@ -31,6 +35,10 @@ export default function ControlPanel(): JSX.Element {
   function handleArtistChange(artist: string) {
     // todo: implement search on BLUR
     dispatch(setMediaSelectionArtist(artist));
+  }
+
+  function handleArtistOnBlur() {
+    renderProcessBridge.searchAlbumArt();
   }
 
   function handleTitleChange(title: string) {
@@ -55,6 +63,7 @@ export default function ControlPanel(): JSX.Element {
           <AlbumArtSearch
             onArtistChange={handleArtistChange}
             onTitleChange={handleTitleChange}
+            onArtistBlur={handleArtistOnBlur}
           />
           <div className={styles.mediaSelectionAndCue}>
             <MediaTypeGrid

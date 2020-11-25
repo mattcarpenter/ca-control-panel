@@ -30,7 +30,7 @@ const controlPanelSlice = createSlice({
     },
     setMediaSelectionMediaTypeImage: (state, action: PayloadAction<string | null>) => {
       state.mediaSelection.selectedMediaTypeImage = action.payload;
-    }
+    },
   },
 });
 

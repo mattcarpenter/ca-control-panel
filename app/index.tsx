@@ -12,7 +12,8 @@ const store = configuredStore();
 // initialize the cross process communication bridge and begin loading album art data
 const bridge = RendererProcessBridge.getInstance();
 bridge.initialize(ipcRenderer, store);
-bridge.getAlbumArtData();
+//bridge.getAlbumArtData('taco');
+bridge.loadAlbumArtFromDisk();
 
 const AppContainer = process.env.PLAIN_HMR ? Fragment : ReactHotAppContainer;
 

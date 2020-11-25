@@ -1,16 +1,21 @@
 import React from 'react';
 import { Input } from 'semantic-ui-react';
 
-export default function DebouncingInput({ placeholder, onChange }): JSX.Element {
+export default function DebouncingInput({ placeholder, onChange, onBlur }): JSX.Element {
   const handleChange = debounceEvent((value) => {
     onChange(value);
   }, 50);
+
+  const handleBlur = debounceEvent(() => {
+    (onBlur || (() => {}))();
+  }, 51);
 
   return (
     <Input
       type="text"
       placeholder={placeholder}
       fluid
+      onBlur={handleBlur}
       onChange={handleChange}
     />
   );

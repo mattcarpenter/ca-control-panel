@@ -26,7 +26,12 @@ export default class RendererProcessBridge {
     });
   }
 
-  getAlbumArtData() {
-    this.ipcRenderer.send('get-album-art-data');
+  searchAlbumArt() {
+    const query = this.store.getState().controlPanel.mediaSelection.artist;
+    this.ipcRenderer.send('search-album-art', query);
+  }
+
+  loadAlbumArtFromDisk() {
+    this.ipcRenderer.send('load-album-art');
   }
 }

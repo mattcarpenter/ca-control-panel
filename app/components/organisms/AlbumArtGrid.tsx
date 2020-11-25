@@ -16,7 +16,7 @@ export default function AlbumArtGrid({ images, onSelection, selectedImage }): JS
             key={index}
             src={img}
             onClick={handleClick}
-            selected={selectedImage == img}
+            selected={selectedImage === img}
             className={styles.cell}
             local
           />
