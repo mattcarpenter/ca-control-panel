@@ -20,5 +20,21 @@
 }
 
 .mediaSelectionFooter {
-  min-height: 100px;
+
+}
+
+.mediaSelectionAndCue {
+  height: 140px;
+  flex-direction: row;
+  display: flex;
+}
+
+.cueContainer {
+  display: table;
+  height: 100%;
+}
+
+.cueContainer > div {
+  display: table-cell;
+  vertical-align: middle;
 }

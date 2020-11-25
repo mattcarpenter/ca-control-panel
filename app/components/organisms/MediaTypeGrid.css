@@ -1,0 +1,16 @@
+.root {
+  height: 105px;
+  display: flex;
+  flex-direction: row;
+  position: relative;
+}
+
+.root img, .root > div {
+  height: 100%;
+  image-rendering: smooth;
+}
+
+.root > div {
+  margin: 20px;
+  position: relative;
+}

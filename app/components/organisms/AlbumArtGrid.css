@@ -13,8 +13,19 @@
 
 .cell {
   width: 33%;
+  position: relative;
 }
 
 .cell > img {
   width: 100%;
+}
+
+.cellBorder {
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  z-index: 2;
+  border: solid 4px #f2c037;
 }

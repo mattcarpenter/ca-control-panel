@@ -1,45 +1,45 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 // eslint-disable-next-line import/no-cycle
-import { AppThunk, RootState } from './store';
+import { RootState } from './store';
 
 const initialState = {
-  albumArtImages: [],
+  mediaSelection: {
+    albumArtImages: [],
+    selectedAlbumArtImage: null,
+    artist: null,
+    title: null,
+  },
 };
 
 const controlPanelSlice = createSlice({
   name: 'controlPanel',
   initialState: initialState,
   reducers: {
-    increment: (state) => {
-      state.value += 1;
-    },
-    decrement: (state) => {
-      state.value -= 1;
-    },
     setAlbumArtImages: (state, action: PayloadAction<string[]>) => {
-      state.albumArtImages = action.payload;
+      state.mediaSelection.albumArtImages = action.payload;
     },
+    setSelectedAlbumArtImage: (state, action: PayloadAction<string | null>) => {
+      state.mediaSelection.selectedAlbumArtImage = action.payload;
+    },
+    setMediaSelectionArtist: (state, action: PayloadAction<string | null>) => {
+      state.mediaSelection.artist = action.payload;
+    },
+    setMediaSelectionTitle: (state, action: PayloadAction<string | null>) => {
+      state.mediaSelection.title = action.payload;
+    }
   },
 });
 
-export const { increment, decrement, setAlbumArtImages } = controlPanelSlice.actions;
-
-export const incrementIfOdd = (): AppThunk => {
-  return (dispatch, getState) => {
-    const state = getState();
-    if (state.counter.value % 2 === 0) {
-      return;
-    }
-    dispatch(increment());
-  };
-};
-
-export const incrementAsync = (delay = 1000): AppThunk => (dispatch) => {
-  setTimeout(() => {
-    dispatch(increment());
-  }, delay);
-};
+export const {
+  setAlbumArtImages,
+  setSelectedAlbumArtImage,
+  setMediaSelectionArtist,
+  setMediaSelectionTitle,
+} = controlPanelSlice.actions;
 
 export default controlPanelSlice.reducer;
 
-export const selectCount = (state: RootState) => state.counter.value;
+export const selectAlbumArtImages = (state: RootState) => state.controlPanel.mediaSelection.albumArtImages;
+export const selectMediaSelectionSelectedAlbumArtImage = (state: RootState) => state.controlPanel.mediaSelection.selectedAlbumArtImage;
+export const selectMediaSelectionArtist = (state: RootState) => state.controlPanel.mediaSelection.artist;
+export const selectMediaSelectionTitle = (state: RootState) => state.controlPanel.mediaSelection.title;
