@@ -1,0 +1,20 @@
+.root {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  overflow-y: scroll;
+  line-height: 0px;
+}
+
+.container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.cell {
+  width: 33%;
+}
+
+.cell > img {
+  width: 100%;
+}

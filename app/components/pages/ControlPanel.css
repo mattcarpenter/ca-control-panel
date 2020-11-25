@@ -1,0 +1,24 @@
+.container {
+  height: 100vh;
+  display: flex;
+  flex-flow: row;
+}
+
+.left {
+  width: 60%;
+  flex-flow: column;
+  display: flex;
+}
+
+.right {
+  width: 40%;
+}
+
+.mediaSelectionGallery {
+  flex: 2;
+  position: relative;
+}
+
+.mediaSelectionFooter {
+  min-height: 100px;
+}
