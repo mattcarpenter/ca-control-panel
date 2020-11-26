@@ -10,6 +10,18 @@ const initialState = {
     artist: null,
     title: null,
   },
+  cued: {
+    selectedAlbumArtImage: null,
+    selectedMediaTypeImage: null,
+    artist: null,
+    title: null,
+  },
+  onAir: {
+    selectedAlbumArtImage: null,
+    selectedMediaTypeImage: null,
+    artist: null,
+    title: null,
+  }
 };
 
 const controlPanelSlice = createSlice({
@@ -31,6 +43,15 @@ const controlPanelSlice = createSlice({
     setMediaSelectionMediaTypeImage: (state, action: PayloadAction<string | null>) => {
       state.mediaSelection.selectedMediaTypeImage = action.payload;
     },
+    cue: (state) => {
+      state.cued.artist = state.mediaSelection.artist;
+      state.cued.title = state.mediaSelection.title;
+      state.cued.selectedMediaTypeImage = state.mediaSelection.selectedMediaTypeImage;
+      state.cued.selectedAlbumArtImage = state.mediaSelection.selectedAlbumArtImage;
+    },
+    take: (state) => {
+      state.onAir = state.cued;
+    },
   },
 });
 
@@ -40,6 +61,8 @@ export const {
   setMediaSelectionArtist,
   setMediaSelectionTitle,
   setMediaSelectionMediaTypeImage,
+  cue,
+  take,
 } = controlPanelSlice.actions;
 
 export default controlPanelSlice.reducer;
@@ -49,3 +72,6 @@ export const selectMediaSelectionSelectedAlbumArtImage = (state: RootState) => s
 export const selectMediaSelectionArtist = (state: RootState) => state.controlPanel.mediaSelection.artist;
 export const selectMediaSelectionTitle = (state: RootState) => state.controlPanel.mediaSelection.title;
 export const selectMediaSelectionSelectedMediaTypeImage = (state: RootState) => state.controlPanel.mediaSelection.selectedMediaTypeImage;
+
+export const selectCuedMetadata = (state: RootState) => state.controlPanel.cued;
+export const selectOnAirMetadata = (state: RootState) => state.controlPanel.onAir;

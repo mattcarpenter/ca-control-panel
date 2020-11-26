@@ -1,0 +1,8 @@
+.root {
+  display: flex;
+  flex-flow: row;
+}
+
+.root > div {
+  flex-grow: 1;
+}

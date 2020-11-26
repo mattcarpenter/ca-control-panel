@@ -13,28 +13,3 @@
 .right {
   width: 40%;
 }
-
-.mediaSelectionGallery {
-  flex: 2;
-  position: relative;
-}
-
-.mediaSelectionFooter {
-
-}
-
-.mediaSelectionAndCue {
-  height: 140px;
-  flex-direction: row;
-  display: flex;
-}
-
-.cueContainer {
-  display: table;
-  height: 100%;
-}
-
-.cueContainer > div {
-  display: table-cell;
-  vertical-align: middle;
-}

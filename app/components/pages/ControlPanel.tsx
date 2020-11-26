@@ -1,8 +1,5 @@
 import React from 'react';
 import styles from './ControlPanel.css';
-import AlbumArtGrid from '../organisms/AlbumArtGrid';
-import AlbumArtSearch from '../organisms/AlbumArtSearch';
-import Button from '../atoms/Button';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   selectAlbumArtImages,
@@ -12,8 +9,13 @@ import {
   setMediaSelectionTitle,
   setMediaSelectionMediaTypeImage,
   selectMediaSelectionSelectedAlbumArtImage,
+  selectCuedMetadata,
+  selectOnAirMetadata,
+  cue,
+  take,
 } from '../../controlPanelSlice';
-import MediaTypeGrid from '../organisms/MediaTypeGrid';
+import MediaSelectionPanel from '../organisms/MediaSelectionPanel';
+import ControlPanelSection from '../organisms/ControlPanel';
 import RendererProcessBridge from '../../lib/rendererProcessBridge';
 
 const renderProcessBridge = RendererProcessBridge.getInstance();
@@ -26,59 +28,33 @@ export default function ControlPanel(): JSX.Element {
   const selectedAlbumArt = useSelector(
     selectMediaSelectionSelectedAlbumArtImage
   );
+  const cuedMetadata = useSelector(selectCuedMetadata);
   const dispatch = useDispatch();
-
-  function handleAlbumArtSelection(img: string | null) {
-    dispatch(setSelectedAlbumArtImage(img));
-  }
-
-  function handleArtistChange(artist: string) {
-    // todo: implement search on BLUR
-    dispatch(setMediaSelectionArtist(artist));
-  }
-
-  function handleArtistOnBlur() {
-    renderProcessBridge.searchAlbumArt();
-  }
-
-  function handleTitleChange(title: string) {
-    dispatch(setMediaSelectionTitle(title));
-  }
-
-  function handleMediaTypeSelection(img: string) {
-    dispatch(setMediaSelectionMediaTypeImage(img));
-  }
 
   return (
     <div className={styles.container}>
       <div className={styles.left}>
-        <div className={styles.mediaSelectionGallery}>
-          <AlbumArtGrid
-            images={albumArtImages}
-            onSelection={handleAlbumArtSelection}
-            selectedImage={selectedAlbumArt}
-          />
-        </div>
-        <div className={styles.mediaSelectionFooter}>
-          <AlbumArtSearch
-            onArtistChange={handleArtistChange}
-            onTitleChange={handleTitleChange}
-            onArtistBlur={handleArtistOnBlur}
-          />
-          <div className={styles.mediaSelectionAndCue}>
-            <MediaTypeGrid
-              onSelection={handleMediaTypeSelection}
-              selectedImage={selectedMediaType}
-            />
-            <div className={styles.cueContainer}>
-              <div>
-                <Button />
-              </div>
-            </div>
-          </div>
-        </div>
+        <MediaSelectionPanel
+          albumArtImages={albumArtImages}
+          onTitleChange={(title: string) => dispatch(setMediaSelectionTitle(title))}
+          onArtistChange={(artist: string) => dispatch(setMediaSelectionArtist(artist))}
+          onArtistBlur={() => renderProcessBridge.searchAlbumArt()}
+          onAlbumArtSelection={(src: string) => dispatch(setSelectedAlbumArtImage(src))}
+          onMediaTypeSelection={(src: string) => dispatch(setMediaSelectionMediaTypeImage(src))}
+          selectedAlbumArt={selectedAlbumArt}
+          selectedMediaType={selectedMediaType}
+          onCue={() => dispatch(cue())}
+        />
       </div>
-      <div className={styles.right}>Right</div>
+      <div className={styles.right}>
+        <ControlPanelSection
+          cuedArtist={cuedMetadata.artist}
+          cuedTitle={cuedMetadata.title}
+          cuedAlbumArtPath={cuedMetadata.selectedAlbumArtImage}
+          cuedMediaSourcePath={cuedMetadata.selectedMediaTypeImage}
+          onTake={() => dispatch(take())}
+        />
+      </div>
     </div>
   );
 }

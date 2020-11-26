@@ -1,0 +1,30 @@
+.root {
+  display: flex;
+  flex-flow: column;
+  height: 100vh;
+}
+
+.mediaSelectionGallery {
+  flex: 2;
+  position: relative;
+}
+
+.mediaSelectionFooter {
+
+}
+
+.mediaSelectionAndCue {
+  height: 140px;
+  flex-direction: row;
+  display: flex;
+}
+
+.cueContainer {
+  display: table;
+  height: 100%;
+}
+
+.cueContainer > div {
+  display: table-cell;
+  vertical-align: middle;
+}
