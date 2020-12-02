@@ -4,11 +4,11 @@ import AlbumArtPreview from './AlbumArtPreview';
 import MetadataText from './MetadataText';
 import MediaSourcePreview from './MediaSourcePreview';
 
-export default function Metadata({ artist, title, albumArtPath, mediaSourcePath }): JSX.Element {
+export default function Metadata({ artist, title, albumArtPath, mediaSourcePath, metadataTitle }): JSX.Element {
 
   return (
     <div className={styles.root}>
-      <div>Cued</div>
+      <div>{metadataTitle}</div>
       <AlbumArtPreview src={albumArtPath} />
       <MetadataText text={artist} />
       <MetadataText text={title} />
@@ -16,3 +16,4 @@ export default function Metadata({ artist, title, albumArtPath, mediaSourcePath 
     </div>
   );
 }
+

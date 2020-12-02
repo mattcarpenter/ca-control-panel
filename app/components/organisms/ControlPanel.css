@@ -1,8 +1,58 @@
 .root {
+  height: 100%;
   display: flex;
-  flex-flow: row;
+  flex-flow: column;
+  padding-left: 30px;
 }
 
-.root > div {
+.controlPanelArea {
+  display: flex;
+  flex-flow: row;
+  flex: 1;
+}
+
+.controlPanelArea > div {
   flex-grow: 1;
+}
+
+
+.liveTextArea {
+  height: 164px;
+}
+
+.buttons {
+  position: relative;
+  text-align: center;
+  top: 63px;
+}
+
+.buttons > button + button {
+  position: absolute;
+  right: 0;
+}
+
+.takeContainer {
+  position: relative;
+  width: 180px;
+  text-align: center;
+}
+
+.takeContainer > button {
+  position: relative;
+  top: 130px;
+}
+
+.controlPanelLabel {
+  position: relative;
+  top: 380px;
+  font-size: 22px;
+  margin-top: 10px;
+  text-align: center;
+}
+
+.liveTextLabel {
+  font-size: 22px;
+  margin-top: 10px;
+  text-align: center;
+  padding-left: 30px;
 }

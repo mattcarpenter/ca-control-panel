@@ -1,7 +1,7 @@
 .root {
   display: flex;
   flex-flow: column;
-  height: 100vh;
+  height: 100%;
 }
 
 .mediaSelectionGallery {
@@ -14,7 +14,8 @@
 }
 
 .mediaSelectionAndCue {
-  height: 140px;
+  height: 125px;
+  position: relative;
   flex-direction: row;
   display: flex;
 }
@@ -22,9 +23,18 @@
 .cueContainer {
   display: table;
   height: 100%;
+  margin-top: 18px;
+  position: absolute;
+  right: 0;
 }
 
 .cueContainer > div {
   display: table-cell;
   vertical-align: middle;
+}
+
+.mediaSelectionLabel {
+  font-size: 22px;
+  margin-top: 10px;
+  text-align: center;
 }

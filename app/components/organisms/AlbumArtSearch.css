@@ -1,8 +1,17 @@
 .root {
   display: flex;
   flex-direction: row;
+  margin-top: 20px;
 }
 
 .root > div {
   width: 50%;
+}
+
+.root > div:nth-child(1) {
+  margin-right: 10px;
+}
+
+.root > div:nth-child(2) {
+  margin-left: 10px;
 }

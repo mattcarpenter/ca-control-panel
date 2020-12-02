@@ -2,14 +2,17 @@
   height: 100vh;
   display: flex;
   flex-flow: row;
+  padding: 20px;
 }
 
 .left {
-  width: 60%;
+  width: 45%;
   flex-flow: column;
   display: flex;
 }
 
 .right {
-  width: 40%;
+  width: 55%;
+  flex-flow: column;
+  display: flex;
 }

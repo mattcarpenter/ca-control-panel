@@ -7,8 +7,8 @@ const initialState = {
     albumArtImages: [],
     selectedAlbumArtImage: null,
     selectedMediaTypeImage: null,
-    artist: null,
-    title: null,
+    artist: '',
+    title: '',
   },
   cued: {
     selectedAlbumArtImage: null,
@@ -50,7 +50,14 @@ const controlPanelSlice = createSlice({
       state.cued.selectedAlbumArtImage = state.mediaSelection.selectedAlbumArtImage;
     },
     take: (state) => {
-      state.onAir = state.cued;
+      // todo: push to web server and media encoder
+      state.onAir = { ...state.cued };
+      state.cued = { ...initialState.cued };
+    },
+    reset: (state) => {
+      state.onAir = { ...initialState.onAir };
+      state.cued = { ...initialState.cued };
+      state.mediaSelection = { ...initialState.mediaSelection };
     },
   },
 });
@@ -63,6 +70,7 @@ export const {
   setMediaSelectionMediaTypeImage,
   cue,
   take,
+  reset,
 } = controlPanelSlice.actions;
 
 export default controlPanelSlice.reducer;

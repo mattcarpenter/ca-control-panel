@@ -7,10 +7,12 @@ export default function SelectableImage({ src, onClick, selected, className, loc
     (onClick || (() => {}))(src);
   }
 
+  const style = selected ? styles.selected : null;
+
   return (
     <div className={className}>
-      <Image src={local ? `file://${src}` : src} onClick={handleClick} />
-      {selected && <div className={styles.cellBorder} />}
+      <Image src={local ? `file://${src}` : src} onClick={handleClick} className={style}/>
+
     </div>
   );
 }

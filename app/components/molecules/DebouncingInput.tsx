@@ -1,14 +1,14 @@
 import React from 'react';
 import { Input } from 'semantic-ui-react';
 
-export default function DebouncingInput({ placeholder, onChange, onBlur }): JSX.Element {
+export default function DebouncingInput({ placeholder, onChange, onBlur, value }): JSX.Element {
   const handleChange = debounceEvent((value) => {
     onChange(value);
-  }, 50);
+  }, 1);
 
   const handleBlur = debounceEvent(() => {
     (onBlur || (() => {}))();
-  }, 51);
+  }, 2);
 
   return (
     <Input
@@ -17,6 +17,7 @@ export default function DebouncingInput({ placeholder, onChange, onBlur }): JSX.
       fluid
       onBlur={handleBlur}
       onChange={handleChange}
+      value={value || ''}
     />
   );
 }

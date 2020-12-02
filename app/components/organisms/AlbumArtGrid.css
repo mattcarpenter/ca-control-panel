@@ -4,6 +4,8 @@
   bottom: 0;
   overflow-y: scroll;
   line-height: 0px;
+  right: 0;
+  left: 0;
 }
 
 .container {
@@ -14,6 +16,7 @@
 .cell {
   width: 33%;
   position: relative;
+  padding: 20px;
 }
 
 .cell > img {
@@ -22,10 +25,14 @@
 
 .cellBorder {
   position: absolute;
-  top: 0px;
-  bottom: 0px;
-  left: 0px;
-  right: 0px;
+  top: 20px;
+  bottom: 20px;
+  left: 20px;
+  right: 20px;
   z-index: 2;
+  border: solid 4px #f2c037;
+}
+
+.selected {
   border: solid 4px #f2c037;
 }

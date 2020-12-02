@@ -13,6 +13,7 @@ import {
   selectOnAirMetadata,
   cue,
   take,
+  reset, selectMediaSelectionTitle, selectMediaSelectionArtist,
 } from '../../controlPanelSlice';
 import MediaSelectionPanel from '../organisms/MediaSelectionPanel';
 import ControlPanelSection from '../organisms/ControlPanel';
@@ -28,7 +29,10 @@ export default function ControlPanel(): JSX.Element {
   const selectedAlbumArt = useSelector(
     selectMediaSelectionSelectedAlbumArtImage
   );
+  const selectedTitle = useSelector(selectMediaSelectionTitle);
+  const selectedArtist = useSelector(selectMediaSelectionArtist);
   const cuedMetadata = useSelector(selectCuedMetadata);
+  const onAirMetadata = useSelector(selectOnAirMetadata);
   const dispatch = useDispatch();
 
   return (
@@ -43,6 +47,8 @@ export default function ControlPanel(): JSX.Element {
           onMediaTypeSelection={(src: string) => dispatch(setMediaSelectionMediaTypeImage(src))}
           selectedAlbumArt={selectedAlbumArt}
           selectedMediaType={selectedMediaType}
+          artist={selectedArtist}
+          title={selectedTitle}
           onCue={() => dispatch(cue())}
         />
       </div>
@@ -52,7 +58,12 @@ export default function ControlPanel(): JSX.Element {
           cuedTitle={cuedMetadata.title}
           cuedAlbumArtPath={cuedMetadata.selectedAlbumArtImage}
           cuedMediaSourcePath={cuedMetadata.selectedMediaTypeImage}
+          onAirArtist={onAirMetadata.artist}
+          onAirTitle={onAirMetadata.title}
+          onAirAlbumArtPath={onAirMetadata.selectedAlbumArtImage}
+          onAirMediaSourcePath={onAirMetadata.selectedMediaTypeImage}
           onTake={() => dispatch(take())}
+          onReset={() => dispatch(reset())}
         />
       </div>
     </div>

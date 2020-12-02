@@ -6,7 +6,7 @@ import MediaTypeGrid from './MediaTypeGrid';
 import Button from '../atoms/Button';
 
 export default function MediaSelectionPanel({ albumArtImages, onAlbumArtSelection, selectedAlbumArt, onArtistChange,
-                                              onTitleChange, onArtistBlur, onMediaTypeSelection, selectedMediaType, onCue }): JSX.Element {
+                                              onTitleChange, onArtistBlur, onMediaTypeSelection, selectedMediaType, onCue, artist, title }): JSX.Element {
   return (
     <div className={styles.root}>
       <div className={styles.mediaSelectionGallery}>
@@ -21,6 +21,8 @@ export default function MediaSelectionPanel({ albumArtImages, onAlbumArtSelectio
           onArtistChange={onArtistChange}
           onTitleChange={onTitleChange}
           onArtistBlur={onArtistBlur}
+          artist={artist}
+          title={title}
         />
         <div className={styles.mediaSelectionAndCue}>
           <MediaTypeGrid
@@ -34,6 +36,7 @@ export default function MediaSelectionPanel({ albumArtImages, onAlbumArtSelectio
           </div>
         </div>
       </div>
+      <div className={styles.mediaSelectionLabel}>Media Selection</div>
     </div>
   );
 }
