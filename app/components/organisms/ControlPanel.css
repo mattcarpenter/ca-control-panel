@@ -9,15 +9,11 @@
   display: flex;
   flex-flow: row;
   flex: 1;
+  justify-content: center;
 }
-
-.controlPanelArea > div {
-  flex-grow: 1;
-}
-
 
 .liveTextArea {
-  height: 164px;
+  height: 174px;
 }
 
 .buttons {
@@ -33,7 +29,7 @@
 
 .takeContainer {
   position: relative;
-  width: 180px;
+  width: 250px;
   text-align: center;
 }
 
@@ -54,5 +50,4 @@
   font-size: 22px;
   margin-top: 10px;
   text-align: center;
-  padding-left: 30px;
 }
