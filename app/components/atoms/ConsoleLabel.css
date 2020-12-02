@@ -1,0 +1,14 @@
+.root {
+  display: inline-block;
+  padding: 3px;
+  margin-bottom: 20px;
+  border-radius:5px;
+}
+
+.content {
+  width: 100px;
+  padding: 12px;
+  background-color: #111;
+  border-radius: 1px;
+  font-size: 1.6em;
+}

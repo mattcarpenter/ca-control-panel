@@ -3,12 +3,13 @@ import styles from './Metadata.css';
 import AlbumArtPreview from './AlbumArtPreview';
 import MetadataText from './MetadataText';
 import MediaSourcePreview from './MediaSourcePreview';
+import ConsoleLabel from '../atoms/ConsoleLabel.tsx';
 
-export default function Metadata({ artist, title, albumArtPath, mediaSourcePath, metadataTitle }): JSX.Element {
+export default function Metadata({ artist, title, albumArtPath, mediaSourcePath, metadataTitle, color1, color2 }): JSX.Element {
 
   return (
     <div className={styles.root}>
-      <div>{metadataTitle}</div>
+      <ConsoleLabel text={metadataTitle} color1={color1} color2={color2}/>
       <AlbumArtPreview src={albumArtPath} />
       <MetadataText text={artist} />
       <MetadataText text={title} />

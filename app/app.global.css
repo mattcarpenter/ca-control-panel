@@ -23,9 +23,17 @@ body, html {
   height: 100vh;
 }
 
+/* Semantic UI Overrides */
+
 input[type=text] {
   background-color: #3e4357 !important;
   color: #eee !important;
   padding: 15px !important;
   border: solid 1px #535b75 !important;
+}
+
+button {
+  background-color: #e04b34 !important;
+  color: #fff !important;
+  box-shadow: 2px 2px 8px rgba(0,0,0,0.35) !important;
 }

@@ -3,6 +3,7 @@ import styles from './ControlPanel.css';
 import Button from '../atoms/Button';
 import Metadata from '../molecules/Metadata';
 import DebouncingInput from '../molecules/DebouncingInput';
+import ConsoleLabel from '../atoms/ConsoleLabel';
 
 export default function ControlPanel({
   cuedAlbumArtPath,
@@ -21,24 +22,28 @@ export default function ControlPanel({
       <div className={styles.controlPanelArea}>
         <div>
           <Metadata
-            metadataTitle="Cued"
+            metadataTitle="CUED"
             artist={cuedArtist}
             title={cuedTitle}
             albumArtPath={cuedAlbumArtPath}
             mediaSourcePath={cuedMediaSourcePath}
+            color1="#e59a4e"
+            color2="#fed741"
           />
         </div>
         <div className={styles.takeContainer}>
-          <Button onClick={onTake} text="Take" />
+          <Button onClick={onTake} text="TAKE" />
           <div className={styles.controlPanelLabel}>Control Panel</div>
         </div>
         <div>
           <Metadata
-            metadataTitle="Air"
+            metadataTitle="AIR"
             artist={onAirArtist}
             title={onAirTitle}
             albumArtPath={onAirAlbumArtPath}
             mediaSourcePath={onAirMediaSourcePath}
+            color1="#81e54e"
+            color2="#4ee567"
           />
         </div>
       </div>
@@ -47,8 +52,8 @@ export default function ControlPanel({
           <DebouncingInput placeholder="Live text..." />
         </div>
         <div className={styles.buttons}>
-          <Button text="Send" />
-          <Button text="Reset" onClick={onReset} />
+          <Button text="SEND" />
+          <Button text="RESET" onClick={onReset} />
         </div>
       </div>
       <div className={styles.liveTextLabel}>LiveText</div>

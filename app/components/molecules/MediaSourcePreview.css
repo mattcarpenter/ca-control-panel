@@ -1,7 +1,9 @@
 .root {
-  border-width: 4px;
+  border-width: 1px;
   border-style: solid;
-  border-color: #000;
+  borer-radius: 3px;
+  border-color: rgba(0,0,0,0.35);
+  background-color: rgba(0,0,0,0.1);
   margin: 0 auto;
   width: 100px;
   height: 100px;
