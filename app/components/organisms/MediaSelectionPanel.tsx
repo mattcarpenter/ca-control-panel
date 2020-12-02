@@ -31,7 +31,7 @@ export default function MediaSelectionPanel({ albumArtImages, onAlbumArtSelectio
           />
           <div className={styles.cueContainer}>
             <div>
-              <Button text="Cue" onClick={onCue} />
+              <Button text="CUE" onClick={onCue} />
             </div>
           </div>
         </div>

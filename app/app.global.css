@@ -4,14 +4,17 @@
  */
 @import '~@fortawesome/fontawesome-free/css/all.css';
 @import '~semantic-ui-css/semantic.css';
+@import url('https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;600&display=swap');
 
 body {
   position: relative;
   height: 100vh;
-  font-family: Arial, Helvetica, Helvetica Neue, serif;
+  /*font-family: Arial, Helvetica, Helvetica Neue, serif;*/
+  font-family: barlow, helvetica, helvetica neue, sans-serif;
   overflow-y: hidden;
   background-color: #2c303e;
   color: #fff;
+  font-size: 1.2em;
 }
 
 body, html {
@@ -32,8 +35,16 @@ input[type=text] {
   border: solid 1px #535b75 !important;
 }
 
-button {
+button.primary {
   background-color: #e04b34 !important;
   color: #fff !important;
   box-shadow: 2px 2px 8px rgba(0,0,0,0.35) !important;
+}
+
+button.primary:hover {
+  background-color: #b73d2b !important;
+}
+
+button.primary:active {
+  background-color: #963223 !important;
 }

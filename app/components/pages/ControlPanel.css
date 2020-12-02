@@ -1,8 +1,27 @@
 .container {
   height: 100vh;
+
+}
+
+.header {
+  padding: 10px 0px 0px 20px;
+  height: 40px;
+  position: relative;
+}
+
+
+
+.menu {
+  display: inline-block;
+  position: absolute;
+  right: 10px;
+}
+
+.inner {
   display: flex;
   flex-flow: row;
   padding: 20px;
+  height: calc(100% - 40px);
 }
 
 .left {
