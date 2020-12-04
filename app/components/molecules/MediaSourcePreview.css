@@ -1,4 +1,4 @@
-.root {
+.emptyRoot {
   border-width: 1px;
   border-style: solid;
   borer-radius: 3px;
@@ -9,6 +9,13 @@
   height: 100px;
 }
 
-.root > img {
+.nonEmptyRoot {
+  width: 100px;
+  height: 100px;
+  margin: 0 auto;
+  padding: 2px;
+}
+
+.nonEmptyRoot > img {
   width: 100%;
 }

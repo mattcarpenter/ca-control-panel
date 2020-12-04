@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styles from './ControlPanel.css';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -13,13 +13,18 @@ import {
   selectOnAirMetadata,
   cue,
   take,
-  reset, selectMediaSelectionTitle, selectMediaSelectionArtist,
+  reset,
+  selectMediaSelectionTitle,
+  selectMediaSelectionArtist,
+  selectLiveText,
+  setLiveText,
 } from '../../controlPanelSlice';
 import MediaSelectionPanel from '../organisms/MediaSelectionPanel';
 import ControlPanelSection from '../organisms/ControlPanel';
 import RendererProcessBridge from '../../lib/rendererProcessBridge';
 import ChoiceAnalogLogo from '../molecules/ChoiceAnalogLogo';
-import {Button, Icon} from 'semantic-ui-react';
+import { Button } from 'semantic-ui-react';
+import SettingsModal from '../organisms/SettingsModal';
 
 const renderProcessBridge = RendererProcessBridge.getInstance();
 
@@ -35,14 +40,29 @@ export default function ControlPanel(): JSX.Element {
   const selectedArtist = useSelector(selectMediaSelectionArtist);
   const cuedMetadata = useSelector(selectCuedMetadata);
   const onAirMetadata = useSelector(selectOnAirMetadata);
+  const liveText = useSelector(selectLiveText);
+
   const dispatch = useDispatch();
+  const [liveTextTimeout, setLiveTextTimeout] = useState<any>(null);
+  const [settingsModalOpen, setSettingsModalOpen] = useState<boolean>(false);
+
+  function handleLiveTextSend(text) {
+    // todo - send to streaming encoder
+    dispatch(setLiveText(''));
+    clearTimeout(liveTextTimeout);
+    setLiveTextTimeout(
+      setTimeout(() => {
+      // todo - clear from website and streaming encoder
+      console.log('clear from website and streaming encoder');
+    }, 10 * 1000));
+  }
 
   return (
     <div className={styles.container}>
       <div className={styles.header}>
         <ChoiceAnalogLogo />
         <div className={styles.menu}>
-          <Button icon="settings" size="small" />
+          <Button icon="settings" size="small" onClick={() => setSettingsModalOpen(true)} />
         </div>
       </div>
       <div className={styles.inner}>
@@ -73,9 +93,16 @@ export default function ControlPanel(): JSX.Element {
             onAirMediaSourcePath={onAirMetadata.selectedMediaTypeImage}
             onTake={() => dispatch(take())}
             onReset={() => dispatch(reset())}
+            onLiveTextChange={(text: string) => dispatch(setLiveText(text))}
+            liveText={liveText}
+            onSendLiveText={handleLiveTextSend}
           />
         </div>
       </div>
+      <SettingsModal
+        onClose={() => setSettingsModalOpen(false)}
+        open={settingsModalOpen}
+      />
     </div>
   );
 }

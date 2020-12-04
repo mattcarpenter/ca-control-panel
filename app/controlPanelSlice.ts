@@ -1,4 +1,4 @@
-import {createSlice, PayloadAction} from '@reduxjs/toolkit';
+import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 // eslint-disable-next-line import/no-cycle
 import { RootState } from './store';
 
@@ -21,12 +21,13 @@ const initialState = {
     selectedMediaTypeImage: null,
     artist: null,
     title: null,
-  }
+  },
+  liveText: '',
 };
 
 const controlPanelSlice = createSlice({
   name: 'controlPanel',
-  initialState: initialState,
+  initialState,
   reducers: {
     setAlbumArtImages: (state, action: PayloadAction<string[]>) => {
       state.mediaSelection.albumArtImages = action.payload;
@@ -40,14 +41,20 @@ const controlPanelSlice = createSlice({
     setMediaSelectionTitle: (state, action: PayloadAction<string | null>) => {
       state.mediaSelection.title = action.payload;
     },
-    setMediaSelectionMediaTypeImage: (state, action: PayloadAction<string | null>) => {
+    setMediaSelectionMediaTypeImage: (
+      state,
+      action: PayloadAction<string | null>
+    ) => {
       state.mediaSelection.selectedMediaTypeImage = action.payload;
     },
     cue: (state) => {
       state.cued.artist = state.mediaSelection.artist;
       state.cued.title = state.mediaSelection.title;
-      state.cued.selectedMediaTypeImage = state.mediaSelection.selectedMediaTypeImage;
-      state.cued.selectedAlbumArtImage = state.mediaSelection.selectedAlbumArtImage;
+      state.cued.selectedMediaTypeImage =
+        state.mediaSelection.selectedMediaTypeImage;
+      state.cued.selectedAlbumArtImage =
+        state.mediaSelection.selectedAlbumArtImage;
+      state.mediaSelection = { ...initialState.mediaSelection };
     },
     take: (state) => {
       // todo: push to web server and media encoder
@@ -58,6 +65,10 @@ const controlPanelSlice = createSlice({
       state.onAir = { ...initialState.onAir };
       state.cued = { ...initialState.cued };
       state.mediaSelection = { ...initialState.mediaSelection };
+      state.liveText = '';
+    },
+    setLiveText: (state, action: PayloadAction<string>) => {
+      state.liveText = action.payload;
     },
   },
 });
@@ -71,15 +82,24 @@ export const {
   cue,
   take,
   reset,
+  setLiveText,
 } = controlPanelSlice.actions;
 
 export default controlPanelSlice.reducer;
 
-export const selectAlbumArtImages = (state: RootState) => state.controlPanel.mediaSelection.albumArtImages;
-export const selectMediaSelectionSelectedAlbumArtImage = (state: RootState) => state.controlPanel.mediaSelection.selectedAlbumArtImage;
-export const selectMediaSelectionArtist = (state: RootState) => state.controlPanel.mediaSelection.artist;
-export const selectMediaSelectionTitle = (state: RootState) => state.controlPanel.mediaSelection.title;
-export const selectMediaSelectionSelectedMediaTypeImage = (state: RootState) => state.controlPanel.mediaSelection.selectedMediaTypeImage;
+export const selectAlbumArtImages = (state: RootState) =>
+  state.controlPanel.mediaSelection.albumArtImages;
+export const selectMediaSelectionSelectedAlbumArtImage = (state: RootState) =>
+  state.controlPanel.mediaSelection.selectedAlbumArtImage;
+export const selectMediaSelectionArtist = (state: RootState) =>
+  state.controlPanel.mediaSelection.artist;
+export const selectMediaSelectionTitle = (state: RootState) =>
+  state.controlPanel.mediaSelection.title;
+export const selectMediaSelectionSelectedMediaTypeImage = (state: RootState) =>
+  state.controlPanel.mediaSelection.selectedMediaTypeImage;
 
 export const selectCuedMetadata = (state: RootState) => state.controlPanel.cued;
-export const selectOnAirMetadata = (state: RootState) => state.controlPanel.onAir;
+export const selectOnAirMetadata = (state: RootState) =>
+  state.controlPanel.onAir;
+
+export const selectLiveText = (state: RootState) => state.controlPanel.liveText;

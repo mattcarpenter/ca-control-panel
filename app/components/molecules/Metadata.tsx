@@ -9,11 +9,11 @@ export default function Metadata({ artist, title, albumArtPath, mediaSourcePath,
 
   return (
     <div className={styles.root}>
-      <ConsoleLabel text={metadataTitle} color1={color1} color2={color2}/>
+      <ConsoleLabel text={metadataTitle} color1={color1} color2={color2} />
       <AlbumArtPreview src={albumArtPath} />
       <MetadataText text={artist} />
       <MetadataText text={title} />
-      <MediaSourcePreview src={mediaSourcePath} />
+      <MediaSourcePreview src={mediaSourcePath} color1={color1} color2={color2} />
     </div>
   );
 }

@@ -4,6 +4,7 @@ import Button from '../atoms/Button';
 import Metadata from '../molecules/Metadata';
 import DebouncingInput from '../molecules/DebouncingInput';
 import ConsoleLabel from '../atoms/ConsoleLabel';
+import {Input} from 'semantic-ui-react';
 
 export default function ControlPanel({
   cuedAlbumArtPath,
@@ -15,7 +16,10 @@ export default function ControlPanel({
   onTake,
   onReset,
   onAirArtist,
-  onAirTitle
+  onAirTitle,
+  onLiveTextChange,
+  liveText,
+  onSendLiveText
 }): JSX.Element {
   return (
     <div className={styles.root}>
@@ -49,10 +53,10 @@ export default function ControlPanel({
       </div>
       <div className={styles.liveTextArea}>
         <div>
-          <DebouncingInput placeholder="Live text..." />
+          <DebouncingInput placeholder="Live text..." onChange={onLiveTextChange} value={liveText}/>
         </div>
         <div className={styles.buttons}>
-          <Button text="SEND" />
+          <Button text="SEND" onClick={() => onSendLiveText(liveText)} />
           <Button text="RESET" onClick={onReset} />
         </div>
       </div>

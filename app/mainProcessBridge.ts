@@ -3,10 +3,17 @@ import { glob } from 'glob';
 import path from 'path';
 import elasticlunr from 'elasticlunr';
 
+elasticlunr.clearStopWords();
+elasticlunr.addStopWords(['a', 'and', 'the']);
+
 let index;
 let mapping;
 
 export default function initialize(ipcMain: IpcMain) {
+
+  /**
+   * Loads album art images from disk and builds the search index. Invoked on application initialization
+   */
   ipcMain.on('load-album-art', event => {
     // todo: use configured path
     glob('/users/matt/desktop/artwork/*.*', (_err: any, files: string[]) => {
@@ -14,16 +21,14 @@ export default function initialize(ipcMain: IpcMain) {
         this.addField('baseName');
         this.setRef('baseName');
       });
-
-      // Clear baseName -> path map
       mapping = {};
-
-      // Add to index and populate map
       files.forEach(p => addToIndex(p));
-      event.reply('album-art-data', Object.keys(mapping).map(baseName => mapping[baseName]));
     });
   });
 
+  /**
+   * Searches the search index for the given query (album name)
+   */
   ipcMain.on('search-album-art', (event, query) => {
     if (query === null || query === '') {
       event.reply('album-art-data', Object.keys(mapping).map(baseName => mapping[baseName]));
