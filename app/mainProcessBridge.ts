@@ -37,7 +37,7 @@ export default function initialize(ipcMain: IpcMain, mainWindow: BrowserWindow) 
    * Launches the system directory picker modal
    */
   ipcMain.on('launch-directory-picker', async (event) => {
-    const paths = await dialog.showOpenDialogSync(mainWindow, {
+    const paths = dialog.showOpenDialogSync(mainWindow, {
       properties: ['openFile', 'openDirectory'],
     });
 
