@@ -14,21 +14,12 @@ let index;
 let mapping;
 
 export default function initialize(ipcMain: IpcMain, mainWindow: BrowserWindow) {
+  initializeSearchIndex();
 
   /**
    * Loads album art images from disk and builds the search index. Invoked on application initialization
    */
-  ipcMain.on('load-album-art', event => {
-    // todo: use configured path
-    glob('/users/matt/desktop/artwork/*.*', (_err: any, files: string[]) => {
-      index = elasticlunr(function () {
-        this.addField('baseName');
-        this.setRef('baseName');
-      });
-      mapping = {};
-      files.forEach(p => addToIndex(p));
-    });
-  });
+  ipcMain.on('load-album-art', loadAlbumArt);
 
   /**
    * Searches the search index for the given query (album name)
@@ -59,13 +50,23 @@ export default function initialize(ipcMain: IpcMain, mainWindow: BrowserWindow) 
     event.reply('settings', s);
   });
 
-  ipcMain.on('store-settings', (_event, s) => {
-    settings.set('settings', {
+  ipcMain.on('store-settings', async (_event, s) => {
+    await settings.set('settings', {
       apiBasePath: s.apiBasePath,
       streamingEncoderIp: s.streamingEncoderIp,
       streamingEncoderPort: s.streamingEncoderPort,
       albumArtDirectory: s.albumArtDirectory,
     });
+    loadAlbumArt();
+  });
+}
+
+async function loadAlbumArt() {
+  const s = await getSettings();
+  initializeSearchIndex();
+
+  glob(path.join(s.albumArtDirectory, '*.*'), (_err: any, files: string[]) => {
+    files.forEach(p => addToIndex(p));
   });
 }
 
@@ -87,4 +88,12 @@ async function getSettings() {
     streamingEncoderPort: s.streamingEncoderPort || DEFAULT_STREAMING_ENCODER_PORT,
     albumArtDirectory: s.albumArtDirectory || '',
   };
+}
+
+function initializeSearchIndex() {
+  index = elasticlunr(function () {
+    this.addField('baseName');
+    this.setRef('baseName');
+  });
+  mapping = {};
 }
