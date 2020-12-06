@@ -1,6 +1,9 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 // eslint-disable-next-line import/no-cycle
 import { RootState } from './store';
+import RendererProcessBridge from './lib/rendererProcessBridge';
+
+const renderProcessBridge = RendererProcessBridge.getInstance();
 
 const initialState = {
   mediaSelection: {
@@ -64,9 +67,15 @@ const controlPanelSlice = createSlice({
       state.mediaSelection = { ...initialState.mediaSelection };
     },
     take: (state) => {
-      // todo: push to web server and media encoder
       state.onAir = { ...state.cued };
       state.cued = { ...initialState.cued };
+
+      renderProcessBridge.sendMetadata(
+        state.onAir.artist || '',
+        state.onAir.title || '',
+        state.onAir.selectedAlbumArtImage || '',
+        state.onAir.selectedMediaTypeImage || ''
+      );
     },
     reset: (state) => {
       state.onAir = { ...initialState.onAir };

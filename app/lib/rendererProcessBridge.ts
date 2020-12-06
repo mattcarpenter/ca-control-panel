@@ -64,4 +64,14 @@ export default class RendererProcessBridge {
   storeSettings() {
     this.ipcRenderer.send('store-settings', this.store.getState().controlPanel.settings);
   }
+
+  sendMetadata(artist: string, title: string, selectedAlbumArtImage: string, selectedMediaTypeImage: string) {
+    console.log('client side: bout to send-metadata')
+    this.ipcRenderer.send('send-metadata', {
+      artist,
+      title,
+      selectedAlbumArtImage,
+      selectedMediaTypeImage,
+    });
+  }
 }

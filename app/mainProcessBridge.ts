@@ -3,6 +3,7 @@ import { glob } from 'glob';
 import path from 'path';
 import elasticlunr from 'elasticlunr';
 import settings from 'electron-settings';
+import { updateMetadata as updateStreamingEncoderMetadata } from './service/streamingEncoder';
 
 const DEFAULT_STREAMING_ENCODER_IP = '192.168.1.200';
 const DEFAULT_STREAMING_ENCODER_PORT = 9000;
@@ -59,13 +60,22 @@ export default function initialize(ipcMain: IpcMain, mainWindow: BrowserWindow) 
     });
     loadAlbumArt();
   });
+
+  ipcMain.on('send-metadata', async (_event, metadata) => {
+    console.log('got send-metadata');
+    const s = await getSettings();
+    updateStreamingEncoderMetadata(
+      s.streamingEncoderIp,
+      s.streamingEncoderPort,
+      metadata.artist,
+      metadata.title
+    );
+  });
 }
 
 async function loadAlbumArt() {
   const s = await getSettings();
   initializeSearchIndex();
-
-  console.log(path.join(s.albumArtDirectory, '*.*'));
 
   glob(path.join(s.albumArtDirectory, '*.*'), (_err: any, files: string[]) => {
     files.forEach(p => addToIndex(p));
