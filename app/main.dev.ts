@@ -85,6 +85,8 @@ const createWindow = async () => {
           },
   });
 
+  initializeBridge(ipcMain, mainWindow);
+
   mainWindow.loadURL(`file://${__dirname}/app.html`);
 
   // @TODO: Use 'ready-to-show' event
@@ -137,8 +139,3 @@ app.on('activate', () => {
   // dock icon is clicked and there are no other windows open.
   if (mainWindow === null) createWindow();
 });
-
-/**
- * Initialize the proccess communication bridge
- */
-initializeBridge(ipcMain);

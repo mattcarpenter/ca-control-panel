@@ -23,6 +23,13 @@ const initialState = {
     title: null,
   },
   liveText: '',
+  settings: {
+    apiBasePath: '',
+    streamingEncoderIp: '',
+    streamingEncoderPort: '',
+    albumArtDirectory: '',
+    pickedAlbumArtDirectory: '',
+  }
 };
 
 const controlPanelSlice = createSlice({
@@ -70,6 +77,21 @@ const controlPanelSlice = createSlice({
     setLiveText: (state, action: PayloadAction<string>) => {
       state.liveText = action.payload;
     },
+    setPickedAlbumArtDirectory: (state, action: PayloadAction<string>) => {
+      state.settings.pickedAlbumArtDirectory = action.payload;
+    },
+    setReduxApiBasePath: (state, action: PayloadAction<string>) => {
+      state.settings.apiBasePath = action.payload;
+    },
+    setReduxStreamingEncoderIp: (state, action: PayloadAction<string>) => {
+      state.settings.streamingEncoderIp = action.payload;
+    },
+    setReduxStreamingEncoderPort: (state, action: PayloadAction<string>) => {
+      state.settings.streamingEncoderPort = action.payload;
+    },
+    setReduxAlbumArtDirectory: (state, action: PayloadAction<string>) => {
+      state.settings.albumArtDirectory = action.payload;
+    },
   },
 });
 
@@ -83,6 +105,11 @@ export const {
   take,
   reset,
   setLiveText,
+  setPickedAlbumArtDirectory,
+  setReduxAlbumArtDirectory,
+  setReduxApiBasePath,
+  setReduxStreamingEncoderIp,
+  setReduxStreamingEncoderPort,
 } = controlPanelSlice.actions;
 
 export default controlPanelSlice.reducer;
@@ -103,3 +130,8 @@ export const selectOnAirMetadata = (state: RootState) =>
   state.controlPanel.onAir;
 
 export const selectLiveText = (state: RootState) => state.controlPanel.liveText;
+export const selectPickedAlbumArtDirectory = (state: RootState) => state.controlPanel.settings.pickedAlbumArtDirectory;
+export const selectAlbumArtDirectory = (state: RootState) => state.controlPanel.settings.albumArtDirectory;
+export const selectApiBasePath = (state: RootState) => state.controlPanel.settings.apiBasePath;
+export const selectStreamingEncoderIp = (state: RootState) => state.controlPanel.settings.streamingEncoderIp;
+export const selectStreamingEncoderPort = (state: RootState) => state.controlPanel.settings.streamingEncoderPort;

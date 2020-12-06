@@ -1,4 +1,4 @@
-import { IpcMain} from 'electron';
+import { IpcMain, dialog, BrowserWindow } from 'electron';
 import { glob } from 'glob';
 import path from 'path';
 import elasticlunr from 'elasticlunr';
@@ -9,7 +9,7 @@ elasticlunr.addStopWords(['a', 'and', 'the']);
 let index;
 let mapping;
 
-export default function initialize(ipcMain: IpcMain) {
+export default function initialize(ipcMain: IpcMain, mainWindow: BrowserWindow) {
 
   /**
    * Loads album art images from disk and builds the search index. Invoked on application initialization
@@ -34,6 +34,16 @@ export default function initialize(ipcMain: IpcMain) {
       event.reply('album-art-data', Object.keys(mapping).map(baseName => mapping[baseName]));
     } else {
       event.reply('album-art-data', index.search(query, {}).map(d => mapping[d.ref]));
+    }
+  });
+
+  ipcMain.on('launch-directory-picker', async (event) => {
+    const paths = await dialog.showOpenDialogSync(mainWindow, {
+      properties: ['openFile', 'openDirectory'],
+    });
+
+    if (Array.isArray(paths) && paths.length > 0) {
+      event.reply('directory-picked', paths[0]);
     }
   });
 }

@@ -54,7 +54,8 @@ export default function ControlPanel(): JSX.Element {
       setTimeout(() => {
       // todo - clear from website and streaming encoder
       console.log('clear from website and streaming encoder');
-    }, 10 * 1000));
+      }, 10 * 1000)
+    );
   }
 
   return (
@@ -62,7 +63,11 @@ export default function ControlPanel(): JSX.Element {
       <div className={styles.header}>
         <ChoiceAnalogLogo />
         <div className={styles.menu}>
-          <Button icon="settings" size="small" onClick={() => setSettingsModalOpen(true)} />
+          <Button
+            icon="settings"
+            size="small"
+            onClick={() => setSettingsModalOpen(true)}
+          />
         </div>
       </div>
       <div className={styles.inner}>

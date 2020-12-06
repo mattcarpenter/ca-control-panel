@@ -1,5 +1,5 @@
 import { IpcRenderer } from 'electron';
-import { setAlbumArtImages } from '../controlPanelSlice';
+import { setAlbumArtImages, setPickedAlbumArtDirectory } from '../controlPanelSlice';
 
 export default class RendererProcessBridge {
   private static instance: RendererProcessBridge;
@@ -24,6 +24,10 @@ export default class RendererProcessBridge {
     this.ipcRenderer.on('album-art-data', (_event, images) => {
       this.store.dispatch(setAlbumArtImages(images));
     });
+
+    this.ipcRenderer.on('directory-picked', (_event, directory) => {
+      this.store.dispatch(setPickedAlbumArtDirectory(directory));
+    });
   }
 
   searchAlbumArt() {
@@ -33,5 +37,9 @@ export default class RendererProcessBridge {
 
   loadAlbumArtFromDisk() {
     this.ipcRenderer.send('load-album-art');
+  }
+
+  launchDirectoryPicker() {
+    this.ipcRenderer.send('launch-directory-picker');
   }
 }
