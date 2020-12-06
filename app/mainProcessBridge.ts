@@ -26,9 +26,9 @@ export default function initialize(ipcMain: IpcMain, mainWindow: BrowserWindow) 
    */
   ipcMain.on('search-album-art', (event, query) => {
     if (query === null || query === '') {
-      event.reply('album-art-data', Object.keys(mapping).map(baseName => mapping[baseName]));
+      event.reply('album-art-data', []);
     } else {
-      event.reply('album-art-data', index.search(query, {}).map(d => mapping[d.ref]));
+      event.reply('album-art-data', index.search(query, { expand: true }).map(d => mapping[d.ref]));
     }
   });
 
@@ -64,6 +64,8 @@ export default function initialize(ipcMain: IpcMain, mainWindow: BrowserWindow) 
 async function loadAlbumArt() {
   const s = await getSettings();
   initializeSearchIndex();
+
+  console.log(path.join(s.albumArtDirectory, '*.*'));
 
   glob(path.join(s.albumArtDirectory, '*.*'), (_err: any, files: string[]) => {
     files.forEach(p => addToIndex(p));
