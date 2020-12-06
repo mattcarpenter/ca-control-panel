@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import {useDispatch, useSelector} from 'react-redux';
-import { Button, Modal, Header, Form } from 'semantic-ui-react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Button, Modal, Form } from 'semantic-ui-react';
 import RendererProcessBridge from '../../lib/rendererProcessBridge';
 import {
   selectAlbumArtDirectory,
   selectApiBasePath,
   selectPickedAlbumArtDirectory,
-  selectStreamingEncoderIp, selectStreamingEncoderPort,
+  selectStreamingEncoderIp,
+  selectStreamingEncoderPort,
   setReduxAlbumArtDirectory,
   setReduxApiBasePath,
   setReduxStreamingEncoderIp,
@@ -29,8 +30,12 @@ export default function SettingsModal({
     reduxAlbumArtDirectory
   );
   const [apiBasePath, setApiBasePath] = useState<string>(reduxApiBasePath);
-  const [streamingEncoderIp, setStreamingEncoderIp] = useState<string>(reduxStreamingEncoderIp);
-  const [streamingEncoderPort, setStreamingEncoderPort] = useState<string>(reduxStreamingEncoderPort);
+  const [streamingEncoderIp, setStreamingEncoderIp] = useState<string>(
+    reduxStreamingEncoderIp
+  );
+  const [streamingEncoderPort, setStreamingEncoderPort] = useState<string>(
+    reduxStreamingEncoderPort
+  );
 
   useEffect(() => {
     setAlbumArtDirectory(pickedAlbumArtDirectory);
@@ -49,7 +54,10 @@ export default function SettingsModal({
     dispatch(setReduxStreamingEncoderIp(streamingEncoderIp));
     dispatch(setReduxApiBasePath(apiBasePath));
     dispatch(setReduxAlbumArtDirectory(albumArtDirectory));
+
     // Send configuration values to the main thread
+    bridge.storeSettings();
+
     onClose();
   }
 
@@ -91,7 +99,10 @@ export default function SettingsModal({
             </Form.Group>
             <Form.Field>
               <label>Album Art Directory</label>
-              <input value={albumArtDirectory} onChange={(event) => setAlbumArtDirectory(event.target.value)} />
+              <input
+                value={albumArtDirectory}
+                onChange={(event) => setAlbumArtDirectory(event.target.value)}
+              />
             </Form.Field>
             <Form.Field
               control={Button}

@@ -2,6 +2,10 @@ import { IpcMain, dialog, BrowserWindow } from 'electron';
 import { glob } from 'glob';
 import path from 'path';
 import elasticlunr from 'elasticlunr';
+import settings from 'electron-settings';
+
+const DEFAULT_STREAMING_ENCODER_IP = '192.168.1.200';
+const DEFAULT_STREAMING_ENCODER_PORT = 9000;
 
 elasticlunr.clearStopWords();
 elasticlunr.addStopWords(['a', 'and', 'the']);
@@ -37,6 +41,9 @@ export default function initialize(ipcMain: IpcMain, mainWindow: BrowserWindow) 
     }
   });
 
+  /**
+   * Launches the system directory picker modal
+   */
   ipcMain.on('launch-directory-picker', async (event) => {
     const paths = await dialog.showOpenDialogSync(mainWindow, {
       properties: ['openFile', 'openDirectory'],
@@ -45,6 +52,20 @@ export default function initialize(ipcMain: IpcMain, mainWindow: BrowserWindow) 
     if (Array.isArray(paths) && paths.length > 0) {
       event.reply('directory-picked', paths[0]);
     }
+  });
+
+  ipcMain.on('load-settings', async (event) => {
+    const s = await getSettings();
+    event.reply('settings', s);
+  });
+
+  ipcMain.on('store-settings', (_event, s) => {
+    settings.set('settings', {
+      apiBasePath: s.apiBasePath,
+      streamingEncoderIp: s.streamingEncoderIp,
+      streamingEncoderPort: s.streamingEncoderPort,
+      albumArtDirectory: s.albumArtDirectory,
+    });
   });
 }
 
@@ -56,4 +77,14 @@ function addToIndex(filePath) {
     baseName,
   });
   mapping[baseName] = filePath;
+}
+
+async function getSettings() {
+  const s = (await settings.get('settings')) || {};
+  return {
+    apiBasePath: s.apiBasePath || '',
+    streamingEncoderIp: s.streamingEncoderIp || DEFAULT_STREAMING_ENCODER_IP,
+    streamingEncoderPort: s.streamingEncoderPort || DEFAULT_STREAMING_ENCODER_PORT,
+    albumArtDirectory: s.albumArtDirectory || '',
+  };
 }

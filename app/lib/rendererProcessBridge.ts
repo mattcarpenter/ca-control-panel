@@ -1,5 +1,12 @@
 import { IpcRenderer } from 'electron';
-import { setAlbumArtImages, setPickedAlbumArtDirectory } from '../controlPanelSlice';
+import {
+  setAlbumArtImages,
+  setPickedAlbumArtDirectory,
+  setReduxApiBasePath,
+  setReduxAlbumArtDirectory,
+  setReduxStreamingEncoderIp,
+  setReduxStreamingEncoderPort,
+} from '../controlPanelSlice';
 
 export default class RendererProcessBridge {
   private static instance: RendererProcessBridge;
@@ -28,6 +35,17 @@ export default class RendererProcessBridge {
     this.ipcRenderer.on('directory-picked', (_event, directory) => {
       this.store.dispatch(setPickedAlbumArtDirectory(directory));
     });
+
+    this.ipcRenderer.on('settings', (_event, settings) => {
+      this.store.dispatch(setReduxApiBasePath(settings.apiBasePath));
+      this.store.dispatch(setReduxStreamingEncoderIp(settings.streamingEncoderIp));
+      this.store.dispatch(setReduxStreamingEncoderPort(settings.streamingEncoderPort));
+      this.store.dispatch(setReduxAlbumArtDirectory(settings.albumArtDirectory));
+    });
+  }
+
+  loadSettings() {
+    this.ipcRenderer.send('load-settings');
   }
 
   searchAlbumArt() {
@@ -41,5 +59,9 @@ export default class RendererProcessBridge {
 
   launchDirectoryPicker() {
     this.ipcRenderer.send('launch-directory-picker');
+  }
+
+  storeSettings() {
+    this.ipcRenderer.send('store-settings', this.store.getState().controlPanel.settings);
   }
 }
