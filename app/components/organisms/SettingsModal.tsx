@@ -60,7 +60,15 @@ export default function SettingsModal({
     setStreamingEncoderIp(reduxStreamingEncoderIp);
     setApiPassword(reduxApiPassword);
     setApiUsername(reduxApiUsername);
-  }, [open]);
+  }, [
+    open,
+    reduxApiBasePath,
+    reduxAlbumArtDirectory,
+    reduxStreamingEncoderIp,
+    reduxStreamingEncoderPort,
+    reduxApiPassword,
+    reduxApiUsername,
+  ]);
 
   function handleSave() {
     // Store local component state in Redux store

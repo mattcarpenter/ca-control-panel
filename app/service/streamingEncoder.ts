@@ -27,8 +27,14 @@ function sendText(ip: string, port: string, text: string) {
       log.error(
         `[service/streamingEncoder#sendText] could not connect to ${ip} on ${port} after ${CONN_TIMEOUT}ms`
       );
-      reject(`Connection to Streaming Encoder timed out after ${CONN_TIMEOUT}ms`);
+      reject(`Connection to Streaming encoder timed out after ${CONN_TIMEOUT}ms`);
     }, CONN_TIMEOUT);
+
+    client.on('error', (error) => {
+      client.destroy();
+      clearTimeout(timeout);
+      reject(`Connection to streaming encoder failed`);
+    });
 
     log.info(
       `[service/streamingEncoder#sendText] connecting to ${ip} on ${port} to send ${text}`

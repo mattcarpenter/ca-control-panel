@@ -32,8 +32,8 @@ const apiRequestListener = function (req, res) {
   res.writeHead(200);
   console.log('[WEB API]', req.method, req.url);
   let body = '';
-  req.on('readable', function () {
-    body += req.read();
+  req.on('data', function (chunk) {
+    body += chunk;
   });
   req.on('end', function () {
     console.log('[WEB API]', req.headers);
