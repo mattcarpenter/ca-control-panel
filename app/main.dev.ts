@@ -73,6 +73,7 @@ const createWindow = async () => {
     height: 940,
     minWidth: 1372,
     minHeight: 940,
+    title: 'ChoiceAnalog Control Pane',
     icon: getAssetPath('icon.png'),
     webPreferences:
       (process.env.NODE_ENV === 'development' ||
