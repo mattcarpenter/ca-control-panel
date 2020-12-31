@@ -27,18 +27,22 @@ function sendText(ip: string, port: string, text: string) {
       log.error(
         `[service/streamingEncoder#sendText] could not connect to ${ip} on ${port} after ${CONN_TIMEOUT}ms`
       );
-      reject(new Error(`Connection to Streaming Encoder timed out after ${CONN_TIMEOUT}ms`));
+      reject(`Connection to Streaming Encoder timed out after ${CONN_TIMEOUT}ms`);
     }, CONN_TIMEOUT);
 
     log.info(
       `[service/streamingEncoder#sendText] connecting to ${ip} on ${port} to send ${text}`
     );
-    client.connect({port, host: ip}, () => {
-      log.info('[service/streamingEncoder#sendText] connected');
-      clearTimeout(timeout);
-      client.write(text);
-      client.destroy();
-      resolve();
-    });
+    try {
+      client.connect({port, host: ip}, () => {
+        log.info('[service/streamingEncoder#sendText] connected');
+        clearTimeout(timeout);
+        client.write(text);
+        client.destroy();
+        resolve();
+      });
+    } catch (e) {
+      reject('[service/streamingEncoder#sendText] immedietly failed to connect');
+    }
   });
 }

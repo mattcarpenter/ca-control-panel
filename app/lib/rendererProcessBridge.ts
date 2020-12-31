@@ -9,6 +9,7 @@ import {
   setReduxApiUsername,
   setReduxApiPassword,
 } from '../controlPanelSlice';
+import {ToastsStore} from 'react-toasts';
 
 export default class RendererProcessBridge {
   private static instance: RendererProcessBridge;
@@ -45,6 +46,10 @@ export default class RendererProcessBridge {
       this.store.dispatch(setReduxAlbumArtDirectory(settings.albumArtDirectory));
       this.store.dispatch(setReduxApiUsername(settings.apiUsername));
       this.store.dispatch(setReduxApiPassword(settings.apiPassword));
+    });
+
+    ipcRenderer.on('toast', (_event, message) => {
+      ToastsStore.error(message, 3000, 'toast-override');
     });
   }
 

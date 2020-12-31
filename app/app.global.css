@@ -26,6 +26,17 @@ body, html {
   height: 100vh;
 }
 
+div.toast-override {
+  background-color: #e74c3c;
+  padding: 2px;
+  font-size: 0.75em;
+  margin: 0px;
+  border-radius: 0px;
+  color: #000 !important;
+  min-height: 0px;
+  margin: 2px;
+}
+
 /* Semantic UI Overrides */
 
 input[type=text] {
@@ -52,3 +63,4 @@ button.primary:active {
 input:focus, button:focus, input[type="radio"]:focus + div img {
   box-shadow: 0px 0px 3px 2px #85B7D9 !important;
 }
+

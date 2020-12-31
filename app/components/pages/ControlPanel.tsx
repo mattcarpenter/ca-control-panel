@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styles from './ControlPanel.css';
 import { useDispatch, useSelector } from 'react-redux';
+import {ToastsContainer, ToastsContainerPosition, ToastsStore} from 'react-toasts';
 import {
   selectAlbumArtImages,
   setSelectedAlbumArtImage,
@@ -109,6 +110,10 @@ export default function ControlPanel(): JSX.Element {
       <SettingsModal
         onClose={() => setSettingsModalOpen(false)}
         open={settingsModalOpen}
+      />
+      <ToastsContainer
+        position={ToastsContainerPosition.BOTTOM_RIGHT}
+        store={ToastsStore}
       />
     </div>
   );

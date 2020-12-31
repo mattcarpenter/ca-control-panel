@@ -79,7 +79,7 @@ export default function initialize(ipcMain: IpcMain, mainWindow: BrowserWindow) 
       s.streamingEncoderPort,
       metadata.artist,
       metadata.title
-    );
+    ).catch(() => toast('Failed to update streaming encoder metadata'));
     updateWebMetadata(
       s.apiBasePath,
       s.apiUsername,
@@ -88,19 +88,23 @@ export default function initialize(ipcMain: IpcMain, mainWindow: BrowserWindow) 
       metadata.title,
       path.basename(metadata.selectedAlbumArtImage),
       path.basename(metadata.selectedMediaTypeImage)
-    );
+    ).catch(() => toast('Failed to update website metadata'));
   });
 
   ipcMain.on('off-air', async (_event) => {
     const s = await getSettings();
-    goOffAir(s.apiBasePath, s.apiUsername, s.apiPassword);
+    goOffAir(s.apiBasePath, s.apiUsername, s.apiPassword).catch(() => toast('Failed to update website on-air status'));
   });
 
   ipcMain.on('livetext', async (_event, text) => {
     const s = await getSettings();
-    updateStreamingEncoderLiveText(s.streamingEncoderIp, s.streamingEncoderPort, text);
-    updateWebLiveText(s.apiBasePath, s.apiUsername, s.apiPassword, text);
+    updateStreamingEncoderLiveText(s.streamingEncoderIp, s.streamingEncoderPort, text).catch(() => toast('Failed to update streaming encoder LiveText'));
+    updateWebLiveText(s.apiBasePath, s.apiUsername, s.apiPassword, text).catch(() => toast('Failed to update website LiveText'));
   });
+
+  function toast(message: string) {
+    mainWindow.webContents.send('toast', message);
+  }
 }
 
 async function loadAlbumArt() {
