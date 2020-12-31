@@ -70,7 +70,7 @@ const createWindow = async () => {
     height: 940,
     minWidth: 1372,
     minHeight: 940,
-    title: 'ChoiceAnalog Control Pane',
+    title: 'ChoiceAnalog Control Panel',
     icon: getAssetPath('icon.png'),
     webPreferences:
       (process.env.NODE_ENV === 'development' ||
@@ -80,6 +80,7 @@ const createWindow = async () => {
             nodeIntegration: true,
           }
         : {
+            nodeIntegration: true,
             preload: path.join(__dirname, 'dist/renderer.prod.js'),
           },
   });
@@ -94,7 +95,7 @@ const createWindow = async () => {
     if (!mainWindow) {
       throw new Error('"mainWindow" is not defined');
     }
-    mainWindow.webContents.openDevTools(); // todo: remove me
+    // mainWindow.webContents.openDevTools();
     if (process.env.START_MINIMIZED) {
       mainWindow.minimize();
     } else {
