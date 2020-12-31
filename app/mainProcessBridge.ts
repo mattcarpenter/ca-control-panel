@@ -3,7 +3,15 @@ import { glob } from 'glob';
 import path from 'path';
 import elasticlunr from 'elasticlunr';
 import settings from 'electron-settings';
-import { updateMetadata as updateStreamingEncoderMetadata } from './service/streamingEncoder';
+import {
+  updateMetadata as updateStreamingEncoderMetadata,
+  updateLiveText as updateStreamingEncoderLiveText,
+} from './service/streamingEncoder';
+import {
+  goOffAir,
+  updateMetdata as updateWebMetadata,
+  updateLiveText as updateWebLiveText,
+} from './service/web';
 
 const DEFAULT_STREAMING_ENCODER_IP = '192.168.1.200';
 const DEFAULT_STREAMING_ENCODER_PORT = 9000;
@@ -57,12 +65,14 @@ export default function initialize(ipcMain: IpcMain, mainWindow: BrowserWindow) 
       streamingEncoderIp: s.streamingEncoderIp,
       streamingEncoderPort: s.streamingEncoderPort,
       albumArtDirectory: s.albumArtDirectory,
+      apiUsername: s.apiUsername,
+      apiPassword: s.apiPassword,
     });
     loadAlbumArt();
   });
 
   ipcMain.on('send-metadata', async (_event, metadata) => {
-    console.log('got send-metadata');
+    console.log('[mainProcessBridge] send-metadata');
     const s = await getSettings();
     updateStreamingEncoderMetadata(
       s.streamingEncoderIp,
@@ -70,6 +80,26 @@ export default function initialize(ipcMain: IpcMain, mainWindow: BrowserWindow) 
       metadata.artist,
       metadata.title
     );
+    updateWebMetadata(
+      s.apiBasePath,
+      s.apiUsername,
+      s.apiPassword,
+      metadata.artist,
+      metadata.title,
+      path.basename(metadata.selectedAlbumArtImage),
+      path.basename(metadata.selectedMediaTypeImage)
+    );
+  });
+
+  ipcMain.on('off-air', async (_event) => {
+    const s = await getSettings();
+    goOffAir(s.apiBasePath, s.apiUsername, s.apiPassword);
+  });
+
+  ipcMain.on('livetext', async (_event, text) => {
+    const s = await getSettings();
+    updateStreamingEncoderLiveText(s.streamingEncoderIp, s.streamingEncoderPort, text);
+    updateWebLiveText(s.apiBasePath, s.apiUsername, s.apiPassword, text);
   });
 }
 
@@ -99,6 +129,8 @@ async function getSettings() {
     streamingEncoderIp: s.streamingEncoderIp || DEFAULT_STREAMING_ENCODER_IP,
     streamingEncoderPort: s.streamingEncoderPort || DEFAULT_STREAMING_ENCODER_PORT,
     albumArtDirectory: s.albumArtDirectory || '',
+    apiUsername: s.apiUsername || '',
+    apiPassword: s.apiPassword || '',
   };
 }
 

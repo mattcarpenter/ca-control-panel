@@ -6,6 +6,8 @@ import {
   setReduxAlbumArtDirectory,
   setReduxStreamingEncoderIp,
   setReduxStreamingEncoderPort,
+  setReduxApiUsername,
+  setReduxApiPassword,
 } from '../controlPanelSlice';
 
 export default class RendererProcessBridge {
@@ -41,6 +43,8 @@ export default class RendererProcessBridge {
       this.store.dispatch(setReduxStreamingEncoderIp(settings.streamingEncoderIp));
       this.store.dispatch(setReduxStreamingEncoderPort(settings.streamingEncoderPort));
       this.store.dispatch(setReduxAlbumArtDirectory(settings.albumArtDirectory));
+      this.store.dispatch(setReduxApiUsername(settings.apiUsername));
+      this.store.dispatch(setReduxApiPassword(settings.apiPassword));
     });
   }
 
@@ -66,12 +70,19 @@ export default class RendererProcessBridge {
   }
 
   sendMetadata(artist: string, title: string, selectedAlbumArtImage: string, selectedMediaTypeImage: string) {
-    console.log('client side: bout to send-metadata')
     this.ipcRenderer.send('send-metadata', {
       artist,
       title,
       selectedAlbumArtImage,
       selectedMediaTypeImage,
     });
+  }
+
+  goOffAir() {
+    this.ipcRenderer.send('off-air');
+  }
+
+  sendLiveText(text: string) {
+    this.ipcRenderer.send('livetext', text);
   }
 }

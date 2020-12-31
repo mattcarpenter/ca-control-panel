@@ -18,6 +18,8 @@ import {
   selectMediaSelectionArtist,
   selectLiveText,
   setLiveText,
+  sendLiveText,
+  clearLiveText,
 } from '../../controlPanelSlice';
 import MediaSelectionPanel from '../organisms/MediaSelectionPanel';
 import ControlPanelSection from '../organisms/ControlPanel';
@@ -46,15 +48,15 @@ export default function ControlPanel(): JSX.Element {
   const [liveTextTimeout, setLiveTextTimeout] = useState<any>(null);
   const [settingsModalOpen, setSettingsModalOpen] = useState<boolean>(false);
 
-  function handleLiveTextSend(text) {
-    // todo - send to streaming encoder
-    dispatch(setLiveText(''));
+  function handleLiveTextSend() {
+    // todo - send to website
+    dispatch(sendLiveText());
     clearTimeout(liveTextTimeout);
     setLiveTextTimeout(
       setTimeout(() => {
-      // todo - clear from website and streaming encoder
-      console.log('clear from website and streaming encoder');
-      }, 10 * 1000)
+        // todo - clear from website
+        dispatch(clearLiveText());
+      }, 10 * 1000) // todo - set correct timeout
     );
   }
 

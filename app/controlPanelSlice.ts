@@ -2,8 +2,9 @@ import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 // eslint-disable-next-line import/no-cycle
 import { RootState } from './store';
 import RendererProcessBridge from './lib/rendererProcessBridge';
+import log from 'electron-log';
 
-const renderProcessBridge = RendererProcessBridge.getInstance();
+const rendererProcessBridge = RendererProcessBridge.getInstance();
 
 const initialState = {
   mediaSelection: {
@@ -32,7 +33,9 @@ const initialState = {
     streamingEncoderPort: '',
     albumArtDirectory: '',
     pickedAlbumArtDirectory: '',
-  }
+    apiUsername: '',
+    apiPassword: '',
+  },
 };
 
 const controlPanelSlice = createSlice({
@@ -67,10 +70,16 @@ const controlPanelSlice = createSlice({
       state.mediaSelection = { ...initialState.mediaSelection };
     },
     take: (state) => {
+      // eslint-disable-next-line @typescript-eslint/no-use-before-define
+      if (areEqualShallow(state.cued, initialState.cued)) {
+        log.warn('[controlPanelSlice#take] take called but cued is empty');
+        return;
+      }
+
       state.onAir = { ...state.cued };
       state.cued = { ...initialState.cued };
 
-      renderProcessBridge.sendMetadata(
+      rendererProcessBridge.sendMetadata(
         state.onAir.artist || '',
         state.onAir.title || '',
         state.onAir.selectedAlbumArtImage || '',
@@ -82,9 +91,19 @@ const controlPanelSlice = createSlice({
       state.cued = { ...initialState.cued };
       state.mediaSelection = { ...initialState.mediaSelection };
       state.liveText = '';
+      rendererProcessBridge.goOffAir();
+      rendererProcessBridge.sendLiveText('');
     },
     setLiveText: (state, action: PayloadAction<string>) => {
       state.liveText = action.payload;
+    },
+    sendLiveText: (state) => {
+      rendererProcessBridge.sendLiveText(state.liveText);
+      state.liveText = '';
+    },
+    clearLiveText: (state) => {
+      state.liveText = '';
+      rendererProcessBridge.sendLiveText('');
     },
     setPickedAlbumArtDirectory: (state, action: PayloadAction<string>) => {
       state.settings.pickedAlbumArtDirectory = action.payload;
@@ -101,6 +120,12 @@ const controlPanelSlice = createSlice({
     setReduxAlbumArtDirectory: (state, action: PayloadAction<string>) => {
       state.settings.albumArtDirectory = action.payload;
     },
+    setReduxApiUsername: (state, action: PayloadAction<string>) => {
+      state.settings.apiUsername = action.payload;
+    },
+    setReduxApiPassword: (state, action: PayloadAction<string>) => {
+      state.settings.apiPassword = action.payload;
+    },
   },
 });
 
@@ -114,11 +139,15 @@ export const {
   take,
   reset,
   setLiveText,
+  sendLiveText,
+  clearLiveText,
   setPickedAlbumArtDirectory,
   setReduxAlbumArtDirectory,
   setReduxApiBasePath,
   setReduxStreamingEncoderIp,
   setReduxStreamingEncoderPort,
+  setReduxApiUsername,
+  setReduxApiPassword,
 } = controlPanelSlice.actions;
 
 export default controlPanelSlice.reducer;
@@ -144,3 +173,19 @@ export const selectAlbumArtDirectory = (state: RootState) => state.controlPanel.
 export const selectApiBasePath = (state: RootState) => state.controlPanel.settings.apiBasePath;
 export const selectStreamingEncoderIp = (state: RootState) => state.controlPanel.settings.streamingEncoderIp;
 export const selectStreamingEncoderPort = (state: RootState) => state.controlPanel.settings.streamingEncoderPort;
+export const selectApiUsername = (state: RootState) => state.controlPanel.settings.apiUsername;
+export const selectApiPassword = (state: RootState) => state.controlPanel.settings.apiPassword;
+
+function areEqualShallow(a, b) {
+  for (let key in a) {
+    if (!(key in b) || a[key] !== b[key]) {
+      return false;
+    }
+  }
+  for (let key in b) {
+    if (!(key in a)) {
+      return false;
+    }
+  }
+  return true;
+}

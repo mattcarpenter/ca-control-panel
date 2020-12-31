@@ -5,6 +5,8 @@ import RendererProcessBridge from '../../lib/rendererProcessBridge';
 import {
   selectAlbumArtDirectory,
   selectApiBasePath,
+  selectApiPassword,
+  selectApiUsername,
   selectPickedAlbumArtDirectory,
   selectStreamingEncoderIp,
   selectStreamingEncoderPort,
@@ -12,7 +14,11 @@ import {
   setReduxApiBasePath,
   setReduxStreamingEncoderIp,
   setReduxStreamingEncoderPort,
+  setReduxApiPassword,
+  setReduxApiUsername,
 } from '../../controlPanelSlice';
+
+const rendererProcessBridge = RendererProcessBridge.getInstance();
 
 export default function SettingsModal({
   open,
@@ -24,6 +30,9 @@ export default function SettingsModal({
   const reduxApiBasePath = useSelector(selectApiBasePath);
   const reduxStreamingEncoderIp = useSelector(selectStreamingEncoderIp);
   const reduxStreamingEncoderPort = useSelector(selectStreamingEncoderPort);
+  const reduxApiUsername = useSelector(selectApiUsername);
+  const reduxApiPassword = useSelector(selectApiPassword);
+
   const dispatch = useDispatch();
 
   const [albumArtDirectory, setAlbumArtDirectory] = useState<string>(
@@ -36,16 +45,21 @@ export default function SettingsModal({
   const [streamingEncoderPort, setStreamingEncoderPort] = useState<string>(
     reduxStreamingEncoderPort
   );
+  const [apiUsername, setApiUsername] = useState<string>(reduxApiUsername);
+  const [apiPassword, setApiPassword] = useState<string>(reduxApiPassword);
 
   useEffect(() => {
     setAlbumArtDirectory(pickedAlbumArtDirectory);
   }, [pickedAlbumArtDirectory]);
 
   useEffect(() => {
+    rendererProcessBridge.loadSettings();
     setAlbumArtDirectory(reduxAlbumArtDirectory);
     setApiBasePath(reduxApiBasePath);
     setStreamingEncoderPort(reduxStreamingEncoderPort);
     setStreamingEncoderIp(reduxStreamingEncoderIp);
+    setApiPassword(reduxApiPassword);
+    setApiUsername(reduxApiUsername);
   }, [open]);
 
   function handleSave() {
@@ -54,6 +68,8 @@ export default function SettingsModal({
     dispatch(setReduxStreamingEncoderIp(streamingEncoderIp));
     dispatch(setReduxApiBasePath(apiBasePath));
     dispatch(setReduxAlbumArtDirectory(albumArtDirectory));
+    dispatch(setReduxApiUsername(apiUsername));
+    dispatch(setReduxApiPassword(apiPassword));
 
     // Send configuration values to the main thread
     bridge.storeSettings();
@@ -75,6 +91,30 @@ export default function SettingsModal({
                 onChange={(event) => setApiBasePath(event.target.value)}
               />
             </Form.Field>
+
+            <Form.Group inline>
+              <Form.Field>
+                <label>Website API Username</label>
+                <input
+                  placeholder=""
+                  value={apiUsername}
+                  onChange={(event) =>
+                    setApiUsername(event.target.value)
+                  }
+                />
+              </Form.Field>
+              <Form.Field>
+                <label>Website API Password</label>
+                <input
+                  placeholder=""
+                  value={apiPassword}
+                  onChange={(event) =>
+                    setApiPassword(event.target.value)
+                  }
+                />
+              </Form.Field>
+            </Form.Group>
+
             <Form.Group inline>
               <Form.Field>
                 <label>Streaming Encoder IP Address</label>
