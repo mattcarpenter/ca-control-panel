@@ -15,15 +15,29 @@ export default function MediaTypeGrid({ onSelection, selectedImage }): JSX.Eleme
     onSelection(src);
   }
 
+  function handleKeyDown(event: KeyboardEvent<HTMLInputElement>) {
+    if(event.keyCode === 32 || event.keyCode == 13) {
+      onSelection(event.currentTarget.value);
+    }
+  }
+
+  // @ts-ignore
   return (
     <div className={styles.root}>
       {images.map((src, index) => (
-        <SelectableImage
-          onClick={handleOnClick}
-          src={src}
-          key={index}
-          selected={src === selectedImage}
-        />
+        <label key={index}>
+          <input
+            type="radio"
+            name="mediaType"
+            value={src}
+            onKeyDown={(event) => handleKeyDown(event)}
+          />
+          <SelectableImage
+            onClick={handleOnClick}
+            src={src}
+            selected={src === selectedImage}
+          />
+        </label>
       ))}
     </div>
   );

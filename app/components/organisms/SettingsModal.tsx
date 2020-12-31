@@ -106,6 +106,7 @@ export default function SettingsModal({
               <Form.Field>
                 <label>Website API Password</label>
                 <input
+                  type="password"
                   placeholder=""
                   value={apiPassword}
                   onChange={(event) =>

@@ -5,12 +5,24 @@
   position: relative;
 }
 
-.root img, .root > div {
+.root label {
+  display: block;
+  width: 105px;
+}
+
+.root input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.root img, .root > label > div {
   height: 100%;
   image-rendering: smooth;
 }
 
-.root > div {
+.root > label {
   margin: 20px 20px 0px 0px;
   position: relative;
 }

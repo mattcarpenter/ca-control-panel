@@ -1,4 +1,11 @@
 /*!
+ * Determine if an object is a Buffer
+ *
+ * @author   Feross Aboukhadijeh <https://feross.org>
+ * @license  MIT
+ */
+
+/*!
  * elasticlunr.Configuration
  * Copyright (C) 2016 Wei Song
  */

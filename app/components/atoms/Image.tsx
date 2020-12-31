@@ -7,6 +7,11 @@ export default function Image({ src, onClick, className }): JSX.Element {
   }
 
   return (
-    <img src={src} onClick={handleClick} alt="Image" className={className} />
+    <img
+      src={src}
+      onClick={handleClick}
+      alt="Image"
+      className={className}
+    />
   );
 }

@@ -11,8 +11,11 @@ export default function SelectableImage({ src, onClick, selected, className, loc
 
   return (
     <div className={className}>
-      <Image src={local ? `file://${src}` : src} onClick={handleClick} className={style}/>
-
+      <Image
+        src={local ? `file://${src}` : src}
+        onClick={handleClick}
+        className={style}
+      />
     </div>
   );
 }
