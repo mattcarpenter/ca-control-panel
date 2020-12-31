@@ -12,16 +12,13 @@ import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 import path from 'path';
 import { app, BrowserWindow, ipcMain } from 'electron';
-import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
 import initializeBridge from './mainProcessBridge';
 
 export default class AppUpdater {
   constructor() {
-    log.transports.file.level = 'info';
-    autoUpdater.logger = log;
-    autoUpdater.checkForUpdatesAndNotify();
+    log.transports.file.level = 'silly';
   }
 }
 
@@ -97,6 +94,7 @@ const createWindow = async () => {
     if (!mainWindow) {
       throw new Error('"mainWindow" is not defined');
     }
+    mainWindow.webContents.openDevTools(); // todo: remove me
     if (process.env.START_MINIMIZED) {
       mainWindow.minimize();
     } else {

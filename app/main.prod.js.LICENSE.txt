@@ -81,8 +81,6 @@
  * Copyright (C) 2016 Oliver Nightingale
  */
 
-/*! http://mths.be/fromcodepoint v0.1.0 by @mathias */
-
 /**
  * @preserve
  * JS Implementation of incremental MurmurHash3 (r150) (as of May 10, 2013)

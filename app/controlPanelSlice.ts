@@ -2,7 +2,6 @@ import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 // eslint-disable-next-line import/no-cycle
 import { RootState } from './store';
 import RendererProcessBridge from './lib/rendererProcessBridge';
-import log from 'electron-log';
 
 const rendererProcessBridge = RendererProcessBridge.getInstance();
 
@@ -72,7 +71,7 @@ const controlPanelSlice = createSlice({
     take: (state) => {
       // eslint-disable-next-line @typescript-eslint/no-use-before-define
       if (areEqualShallow(state.cued, initialState.cued)) {
-        log.warn('[controlPanelSlice#take] take called but cued is empty');
+        console.warn('[controlPanelSlice#take] take called but cued is empty');
         return;
       }
 
