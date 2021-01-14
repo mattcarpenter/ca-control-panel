@@ -69,7 +69,7 @@ const createWindow = async () => {
     width: 1372,
     height: 940,
     minWidth: 1372,
-    minHeight: 940,
+    minHeight: 960,
     title: 'ChoiceAnalog Control Panel',
     icon: getAssetPath('icon.png'),
     webPreferences:
@@ -84,6 +84,8 @@ const createWindow = async () => {
             preload: path.join(__dirname, 'dist/renderer.prod.js'),
           },
   });
+
+  mainWindow.setMenu(null);
 
   initializeBridge(ipcMain, mainWindow);
 
@@ -108,9 +110,6 @@ const createWindow = async () => {
     mainWindow = null;
     app.quit();
   });
-
-  const menuBuilder = new MenuBuilder(mainWindow);
-  menuBuilder.buildMenu();
 
   // Remove this if your app does not use auto updates
   // eslint-disable-next-line

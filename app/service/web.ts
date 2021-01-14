@@ -6,6 +6,13 @@ const UPDATE_METADATA_PATH = 'wp-json/ca/v1/meta/update';
 const UPDATE_LIVETEXT_PATH = 'wp-json/ca/v1/live_text/update';
 const UPDATE_SHOW_STATUS_PATH = 'wp-json/ca/v1/meta/update';
 
+const ALBUM_SOURCES = {
+  'vinyl.jpg': 'Vinyl',
+  'cassette.jpg': 'Cassette',
+  'hi-res.jpg': 'Hi Res Audio',
+  'reel-to-reel.jpg': 'Tape Recorder'
+};
+
 export const updateMetdata = (
   basePath: string,
   username: string,
@@ -17,11 +24,12 @@ export const updateMetdata = (
 ) => {
   return new Promise((resolve, reject) => {
     const path = makePath(basePath, UPDATE_METADATA_PATH);
+    const albumSource = ALBUM_SOURCES[mediaTypeImage];
     const body = {
       show_is_live: '1',
       album_cover: albumArtImage,
-      // album_title: title,
-      album_source: 'Vinyl',
+      //album_title: title,
+      album_source: albumSource,
       album_artist: artist,
       album_song: title,
     };
