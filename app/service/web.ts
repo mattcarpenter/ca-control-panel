@@ -20,7 +20,8 @@ export const updateMetdata = (
   artist: string,
   title: string,
   albumArtImage: string,
-  mediaTypeImage: string
+  mediaTypeImage: string,
+  albumTitle: string
 ) => {
   return new Promise((resolve, reject) => {
     const path = makePath(basePath, UPDATE_METADATA_PATH);
@@ -28,7 +29,7 @@ export const updateMetdata = (
     const body = {
       show_is_live: '1',
       album_cover: albumArtImage,
-      //album_title: title,
+      album_title: albumTitle,
       album_source: albumSource,
       album_artist: artist,
       album_song: title,

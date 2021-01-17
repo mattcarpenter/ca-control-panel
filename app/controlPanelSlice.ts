@@ -32,6 +32,7 @@ const initialState = {
     streamingEncoderPort: '',
     albumArtDirectory: '',
     pickedAlbumArtDirectory: '',
+    albumCSVFile: '',
     apiUsername: '',
     apiPassword: '',
   },
@@ -119,6 +120,9 @@ const controlPanelSlice = createSlice({
     setReduxAlbumArtDirectory: (state, action: PayloadAction<string>) => {
       state.settings.albumArtDirectory = action.payload;
     },
+    setAlbumCSVFile: (state, action: PayloadAction<string>) => {
+      state.settings.albumCSVFile = action.payload;
+    },
     setReduxApiUsername: (state, action: PayloadAction<string>) => {
       state.settings.apiUsername = action.payload;
     },
@@ -141,6 +145,7 @@ export const {
   sendLiveText,
   clearLiveText,
   setPickedAlbumArtDirectory,
+  setAlbumCSVFile,
   setReduxAlbumArtDirectory,
   setReduxApiBasePath,
   setReduxStreamingEncoderIp,
@@ -169,6 +174,7 @@ export const selectOnAirMetadata = (state: RootState) =>
 export const selectLiveText = (state: RootState) => state.controlPanel.liveText;
 export const selectPickedAlbumArtDirectory = (state: RootState) => state.controlPanel.settings.pickedAlbumArtDirectory;
 export const selectAlbumArtDirectory = (state: RootState) => state.controlPanel.settings.albumArtDirectory;
+export const selectAlbumCSVFile = (state: RootState) => state.controlPanel.settings.albumCSVFile;
 export const selectApiBasePath = (state: RootState) => state.controlPanel.settings.apiBasePath;
 export const selectStreamingEncoderIp = (state: RootState) => state.controlPanel.settings.streamingEncoderIp;
 export const selectStreamingEncoderPort = (state: RootState) => state.controlPanel.settings.streamingEncoderPort;

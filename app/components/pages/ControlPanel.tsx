@@ -50,14 +50,12 @@ export default function ControlPanel(): JSX.Element {
   const [settingsModalOpen, setSettingsModalOpen] = useState<boolean>(false);
 
   function handleLiveTextSend() {
-    // todo - send to website
     dispatch(sendLiveText());
     clearTimeout(liveTextTimeout);
     setLiveTextTimeout(
       setTimeout(() => {
-        // todo - clear from website
         dispatch(clearLiveText());
-      }, 10 * 1000) // todo - set correct timeout
+      }, 60 * 1000)
     );
   }
 

@@ -8,6 +8,7 @@ import {
   selectApiPassword,
   selectApiUsername,
   selectPickedAlbumArtDirectory,
+  selectAlbumCSVFile,
   selectStreamingEncoderIp,
   selectStreamingEncoderPort,
   setReduxAlbumArtDirectory,
@@ -32,12 +33,14 @@ export default function SettingsModal({
   const reduxStreamingEncoderPort = useSelector(selectStreamingEncoderPort);
   const reduxApiUsername = useSelector(selectApiUsername);
   const reduxApiPassword = useSelector(selectApiPassword);
+  const reduxAlbumCSVFile = useSelector(selectAlbumCSVFile);
 
   const dispatch = useDispatch();
 
   const [albumArtDirectory, setAlbumArtDirectory] = useState<string>(
     reduxAlbumArtDirectory
   );
+  const [albumCSVFile, setAlbumCSVFile] = useState<string>(reduxAlbumCSVFile);
   const [apiBasePath, setApiBasePath] = useState<string>(reduxApiBasePath);
   const [streamingEncoderIp, setStreamingEncoderIp] = useState<string>(
     reduxStreamingEncoderIp
@@ -55,6 +58,7 @@ export default function SettingsModal({
   useEffect(() => {
     rendererProcessBridge.loadSettings();
     setAlbumArtDirectory(reduxAlbumArtDirectory);
+    setAlbumCSVFile(reduxAlbumCSVFile);
     setApiBasePath(reduxApiBasePath);
     setStreamingEncoderPort(reduxStreamingEncoderPort);
     setStreamingEncoderIp(reduxStreamingEncoderIp);
@@ -68,6 +72,7 @@ export default function SettingsModal({
     reduxStreamingEncoderPort,
     reduxApiPassword,
     reduxApiUsername,
+    reduxAlbumCSVFile,
   ]);
 
   function handleSave() {
@@ -157,6 +162,18 @@ export default function SettingsModal({
               control={Button}
               content="Choose Directory..."
               onClick={() => bridge.launchDirectoryPicker()}
+            />
+            <Form.Field>
+              <label>Album Name CSV File</label>
+              <input
+                value={albumCSVFile}
+                onChange={(event) => setAlbumCSVFile(event.target.value)}
+              />
+            </Form.Field>
+            <Form.Field
+              control={Button}
+              content="Choose File..."
+              onClick={() => bridge.launchFilePicker()}
             />
           </Form>
         </Modal.Description>

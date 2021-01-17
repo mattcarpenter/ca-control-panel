@@ -1,6 +1,8 @@
 import { IpcMain, dialog, BrowserWindow } from 'electron';
 import { glob } from 'glob';
+import csv from 'csv-parser';
 import path from 'path';
+import fs from 'fs';
 import elasticlunr from 'elasticlunr';
 import settings from 'electron-settings';
 import {
@@ -21,14 +23,20 @@ elasticlunr.addStopWords(['a', 'and', 'the']);
 
 let index;
 let mapping;
+let albumNames = {};
 
 export default function initialize(ipcMain: IpcMain, mainWindow: BrowserWindow) {
   initializeSearchIndex();
+  loadAlbumDictionary();
 
   /**
    * Loads album art images from disk and builds the search index. Invoked on application initialization
    */
   ipcMain.on('load-album-art', loadAlbumArt);
+
+  /**
+   * Loads album name dictionary
+   */
 
   /**
    * Searches the search index for the given query (album name)
@@ -45,12 +53,25 @@ export default function initialize(ipcMain: IpcMain, mainWindow: BrowserWindow) 
    * Launches the system directory picker modal
    */
   ipcMain.on('launch-directory-picker', async (event) => {
+    const files = dialog.showOpenDialogSync(mainWindow, {
+      properties: ['openDirectory'], //openFile too?
+    });
+
+    if (Array.isArray(files) && files.length > 0) {
+      event.reply('file-picked', files[0]);
+    }
+  });
+
+  /**
+   * Launches the system file picker modal
+   */
+  ipcMain.on('launch-file-picker', async (event) => {
     const paths = dialog.showOpenDialogSync(mainWindow, {
-      properties: ['openFile', 'openDirectory'],
+      properties: ['openFile'],
     });
 
     if (Array.isArray(paths) && paths.length > 0) {
-      event.reply('directory-picked', paths[0]);
+      event.reply('file-picked', paths[0]);
     }
   });
 
@@ -65,10 +86,12 @@ export default function initialize(ipcMain: IpcMain, mainWindow: BrowserWindow) 
       streamingEncoderIp: s.streamingEncoderIp,
       streamingEncoderPort: s.streamingEncoderPort,
       albumArtDirectory: s.albumArtDirectory,
+      albumCSVFile: s.albumCSVFile,
       apiUsername: s.apiUsername,
       apiPassword: s.apiPassword,
     });
     loadAlbumArt();
+    loadAlbumDictionary();
   });
 
   ipcMain.on('send-metadata', async (_event, metadata) => {
@@ -87,7 +110,8 @@ export default function initialize(ipcMain: IpcMain, mainWindow: BrowserWindow) 
       metadata.artist,
       metadata.title,
       path.basename(metadata.selectedAlbumArtImage),
-      path.basename(metadata.selectedMediaTypeImage)
+      path.basename(metadata.selectedMediaTypeImage),
+      albumNames[path.basename(metadata.selectedAlbumArtImage)] || ''
     ).catch(() => toast('Failed to update website metadata'));
   });
 
@@ -133,6 +157,7 @@ async function getSettings() {
     streamingEncoderIp: s.streamingEncoderIp || DEFAULT_STREAMING_ENCODER_IP,
     streamingEncoderPort: s.streamingEncoderPort || DEFAULT_STREAMING_ENCODER_PORT,
     albumArtDirectory: s.albumArtDirectory || '',
+    albumCSVFile: s.albumCSVFile || '',
     apiUsername: s.apiUsername || '',
     apiPassword: s.apiPassword || '',
   };
@@ -144,4 +169,26 @@ function initializeSearchIndex() {
     this.setRef('baseName');
   });
   mapping = {};
+}
+
+async function loadAlbumDictionary() {
+  const s = await getSettings();
+  if (!s.albumCSVFile) return;
+
+  const results: any[] = [];
+  fs.createReadStream(s.albumCSVFile)
+    .pipe(csv())
+    .on('data', (data) => results.push(data))
+    .on('end', () => {
+      albumNames = {};
+      results.forEach((r) => {
+        try {
+          const filePath = r["'Cover Front'"].replace(/(^')|('$)/g, '');
+          const fileName = filePath.replace(/^.*[\\\/]/, '');
+          albumNames[fileName] = r["'Title'"].replace(/(^')|('$)/g, '');
+        } catch (e) {
+          console.log('failed to parse CSV row', e);
+        }
+      });
+    });
 }

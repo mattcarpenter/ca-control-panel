@@ -4,6 +4,7 @@ import {
   setPickedAlbumArtDirectory,
   setReduxApiBasePath,
   setReduxAlbumArtDirectory,
+  setAlbumCSVFile,
   setReduxStreamingEncoderIp,
   setReduxStreamingEncoderPort,
   setReduxApiUsername,
@@ -39,11 +40,16 @@ export default class RendererProcessBridge {
       this.store.dispatch(setPickedAlbumArtDirectory(directory));
     });
 
+    this.ipcRenderer.on('file-picked', (_event, file) => {
+      this.store.dispatch(setAlbumCSVFile(file));
+    });
+
     this.ipcRenderer.on('settings', (_event, settings) => {
       this.store.dispatch(setReduxApiBasePath(settings.apiBasePath));
       this.store.dispatch(setReduxStreamingEncoderIp(settings.streamingEncoderIp));
       this.store.dispatch(setReduxStreamingEncoderPort(settings.streamingEncoderPort));
       this.store.dispatch(setReduxAlbumArtDirectory(settings.albumArtDirectory));
+      this.store.dispatch(setAlbumCSVFile(settings.albumCSVFile));
       this.store.dispatch(setReduxApiUsername(settings.apiUsername));
       this.store.dispatch(setReduxApiPassword(settings.apiPassword));
     });
@@ -68,6 +74,10 @@ export default class RendererProcessBridge {
 
   launchDirectoryPicker() {
     this.ipcRenderer.send('launch-directory-picker');
+  }
+
+  launchFilePicker() {
+    this.ipcRenderer.send('launch-file-picker');
   }
 
   storeSettings() {
