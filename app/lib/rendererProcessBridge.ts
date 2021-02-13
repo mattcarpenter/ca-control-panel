@@ -37,14 +37,16 @@ export default class RendererProcessBridge {
     });
 
     this.ipcRenderer.on('directory-picked', (_event, directory) => {
-      this.store.dispatch(setPickedAlbumArtDirectory(directory));
+      console.log('directory picked', directory);
+      this.store.dispatch(setReduxAlbumArtDirectory(directory));
     });
 
     this.ipcRenderer.on('file-picked', (_event, file) => {
+      console.log('file picked', file);
       this.store.dispatch(setAlbumCSVFile(file));
     });
 
-    this.ipcRenderer.on('settings', (_event, settings) => {
+    /*this.ipcRenderer.on('settings', (_event, settings) => {
       this.store.dispatch(setReduxApiBasePath(settings.apiBasePath));
       this.store.dispatch(setReduxStreamingEncoderIp(settings.streamingEncoderIp));
       this.store.dispatch(setReduxStreamingEncoderPort(settings.streamingEncoderPort));
@@ -52,7 +54,7 @@ export default class RendererProcessBridge {
       this.store.dispatch(setAlbumCSVFile(settings.albumCSVFile));
       this.store.dispatch(setReduxApiUsername(settings.apiUsername));
       this.store.dispatch(setReduxApiPassword(settings.apiPassword));
-    });
+    });*/
 
     ipcRenderer.on('toast', (_event, message) => {
       ToastsStore.error(message, 3000, 'toast-override');
@@ -61,6 +63,15 @@ export default class RendererProcessBridge {
 
   loadSettings() {
     this.ipcRenderer.send('load-settings');
+  }
+
+  getSettings() {
+    return new Promise(resolve => {
+      this.ipcRenderer.once('settings', (_event, settings) => {
+        resolve(settings);
+      });
+      this.ipcRenderer.send('load-settings');
+    });
   }
 
   searchAlbumArt() {
@@ -80,8 +91,8 @@ export default class RendererProcessBridge {
     this.ipcRenderer.send('launch-file-picker');
   }
 
-  storeSettings() {
-    this.ipcRenderer.send('store-settings', this.store.getState().controlPanel.settings);
+  storeSettings(settings) {
+    this.ipcRenderer.send('store-settings', settings);
   }
 
   sendMetadata(artist: string, title: string, selectedAlbumArtImage: string, selectedMediaTypeImage: string) {

@@ -4,19 +4,7 @@ import { Button, Modal, Form } from 'semantic-ui-react';
 import RendererProcessBridge from '../../lib/rendererProcessBridge';
 import {
   selectAlbumArtDirectory,
-  selectApiBasePath,
-  selectApiPassword,
-  selectApiUsername,
-  selectPickedAlbumArtDirectory,
   selectAlbumCSVFile,
-  selectStreamingEncoderIp,
-  selectStreamingEncoderPort,
-  setReduxAlbumArtDirectory,
-  setReduxApiBasePath,
-  setReduxStreamingEncoderIp,
-  setReduxStreamingEncoderPort,
-  setReduxApiPassword,
-  setReduxApiUsername,
 } from '../../controlPanelSlice';
 
 const rendererProcessBridge = RendererProcessBridge.getInstance();
@@ -26,66 +14,55 @@ export default function SettingsModal({
   onClose = () => {},
 }): JSX.Element {
   const bridge = RendererProcessBridge.getInstance();
-  const pickedAlbumArtDirectory = useSelector(selectPickedAlbumArtDirectory);
+
   const reduxAlbumArtDirectory = useSelector(selectAlbumArtDirectory);
-  const reduxApiBasePath = useSelector(selectApiBasePath);
-  const reduxStreamingEncoderIp = useSelector(selectStreamingEncoderIp);
-  const reduxStreamingEncoderPort = useSelector(selectStreamingEncoderPort);
-  const reduxApiUsername = useSelector(selectApiUsername);
-  const reduxApiPassword = useSelector(selectApiPassword);
   const reduxAlbumCSVFile = useSelector(selectAlbumCSVFile);
 
-  const dispatch = useDispatch();
-
-  const [albumArtDirectory, setAlbumArtDirectory] = useState<string>(
-    reduxAlbumArtDirectory
-  );
-  const [albumCSVFile, setAlbumCSVFile] = useState<string>(reduxAlbumCSVFile);
-  const [apiBasePath, setApiBasePath] = useState<string>(reduxApiBasePath);
-  const [streamingEncoderIp, setStreamingEncoderIp] = useState<string>(
-    reduxStreamingEncoderIp
-  );
-  const [streamingEncoderPort, setStreamingEncoderPort] = useState<string>(
-    reduxStreamingEncoderPort
-  );
-  const [apiUsername, setApiUsername] = useState<string>(reduxApiUsername);
-  const [apiPassword, setApiPassword] = useState<string>(reduxApiPassword);
+  const [albumArtDirectory, setAlbumArtDirectory] = useState<string>('');
+  const [albumCSVFile, setAlbumCSVFile] = useState<string>('');
+  const [apiBasePath, setApiBasePath] = useState<string>('');
+  const [streamingEncoderIp, setStreamingEncoderIp] = useState<string>('');
+  const [streamingEncoderPort, setStreamingEncoderPort] = useState<string>('');
+  const [apiUsername, setApiUsername] = useState<string>('');
+  const [apiPassword, setApiPassword] = useState<string>('');
 
   useEffect(() => {
-    setAlbumArtDirectory(pickedAlbumArtDirectory);
-  }, [pickedAlbumArtDirectory]);
+    async function load() {
+      const settings = await rendererProcessBridge.getSettings();
+      console.log(settings);
+      setAlbumArtDirectory(settings.albumArtDirectory);
+      setAlbumCSVFile(settings.albumCSVFile);
+      setApiBasePath(settings.apiBasePath);
+      setStreamingEncoderIp(settings.streamingEncoderIp);
+      setStreamingEncoderPort(settings.streamingEncoderPort);
+      setApiUsername(settings.apiUsername);
+      setApiPassword(settings.apiPassword);
+    }
+    if (open) {
+      load();
+    }
+  }, [open]);
 
   useEffect(() => {
-    rendererProcessBridge.loadSettings();
-    setAlbumArtDirectory(reduxAlbumArtDirectory);
-    setAlbumCSVFile(reduxAlbumCSVFile);
-    setApiBasePath(reduxApiBasePath);
-    setStreamingEncoderPort(reduxStreamingEncoderPort);
-    setStreamingEncoderIp(reduxStreamingEncoderIp);
-    setApiPassword(reduxApiPassword);
-    setApiUsername(reduxApiUsername);
-  }, [
-    open,
-    reduxApiBasePath,
-    reduxAlbumArtDirectory,
-    reduxStreamingEncoderIp,
-    reduxStreamingEncoderPort,
-    reduxApiPassword,
-    reduxApiUsername,
-    reduxAlbumCSVFile,
-  ]);
+    if (reduxAlbumArtDirectory) {
+      setAlbumArtDirectory(reduxAlbumArtDirectory);
+    }
+    if (reduxAlbumCSVFile) {
+      setAlbumCSVFile(reduxAlbumCSVFile);
+    }
+  }, [reduxAlbumCSVFile, reduxAlbumArtDirectory]);
 
   function handleSave() {
-    // Store local component state in Redux store
-    dispatch(setReduxStreamingEncoderPort(streamingEncoderPort));
-    dispatch(setReduxStreamingEncoderIp(streamingEncoderIp));
-    dispatch(setReduxApiBasePath(apiBasePath));
-    dispatch(setReduxAlbumArtDirectory(albumArtDirectory));
-    dispatch(setReduxApiUsername(apiUsername));
-    dispatch(setReduxApiPassword(apiPassword));
-
     // Send configuration values to the main thread
-    bridge.storeSettings();
+    bridge.storeSettings({
+      albumArtDirectory,
+      albumCSVFile,
+      apiBasePath,
+      streamingEncoderIp,
+      streamingEncoderPort,
+      apiUsername,
+      apiPassword,
+    });
 
     onClose();
   }

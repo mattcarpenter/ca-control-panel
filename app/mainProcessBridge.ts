@@ -58,7 +58,7 @@ export default function initialize(ipcMain: IpcMain, mainWindow: BrowserWindow) 
     });
 
     if (Array.isArray(files) && files.length > 0) {
-      event.reply('file-picked', files[0]);
+      event.reply('directory-picked', files[0]);
     }
   });
 
@@ -77,11 +77,12 @@ export default function initialize(ipcMain: IpcMain, mainWindow: BrowserWindow) 
 
   ipcMain.on('load-settings', async (event) => {
     const s = await getSettings();
+    console.log('main process getSettings: ', s);
     event.reply('settings', s);
   });
 
   ipcMain.on('store-settings', async (_event, s) => {
-    await settings.set('settings', {
+    const obj = {
       apiBasePath: s.apiBasePath,
       streamingEncoderIp: s.streamingEncoderIp,
       streamingEncoderPort: s.streamingEncoderPort,
@@ -89,7 +90,10 @@ export default function initialize(ipcMain: IpcMain, mainWindow: BrowserWindow) 
       albumCSVFile: s.albumCSVFile,
       apiUsername: s.apiUsername,
       apiPassword: s.apiPassword,
-    });
+    };
+
+    await settings.set('settings', obj);
+    console.log('main process store settings: ', obj);
     loadAlbumArt();
     loadAlbumDictionary();
   });
