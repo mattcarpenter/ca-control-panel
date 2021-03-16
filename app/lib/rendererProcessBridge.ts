@@ -108,7 +108,7 @@ export default class RendererProcessBridge {
     this.ipcRenderer.send('off-air');
   }
 
-  sendLiveText(text: string) {
-    this.ipcRenderer.send('livetext', text);
+  sendLiveText(text: string, options: any) {
+    this.ipcRenderer.send('livetext', text, options);
   }
 }

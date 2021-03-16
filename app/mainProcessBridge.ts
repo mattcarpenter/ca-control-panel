@@ -124,10 +124,16 @@ export default function initialize(ipcMain: IpcMain, mainWindow: BrowserWindow) 
     goOffAir(s.apiBasePath, s.apiUsername, s.apiPassword).catch(() => toast('Failed to update website on-air status'));
   });
 
-  ipcMain.on('livetext', async (_event, text) => {
+  ipcMain.on('livetext', async (_event, text, options = {}) => {
     const s = await getSettings();
     updateStreamingEncoderLiveText(s.streamingEncoderIp, s.streamingEncoderPort, text).catch(() => toast('Failed to update streaming encoder LiveText'));
-    updateWebLiveText(s.apiBasePath, s.apiUsername, s.apiPassword, text).catch(() => toast('Failed to update website LiveText'));
+    if (!options.streamingEncoderOnly) {
+      updateWebLiveText(s.apiBasePath, s.apiUsername, s.apiPassword, text).catch(() => toast('Failed to update website LiveText'));
+    } else {
+      // FE instructed us to update the streaming encoder only. This probably means its trying to restore the on-air metadata
+      // in this case, we should clear the web live text.
+      updateWebLiveText(s.apiBasePath, s.apiUsername, s.apiPassword, '');
+    }
   });
 
   function toast(message: string) {

@@ -103,7 +103,13 @@ const controlPanelSlice = createSlice({
     },
     clearLiveText: (state) => {
       state.liveText = '';
-      rendererProcessBridge.sendLiveText('');
+      if (state.onAir.artist && state.onAir.title) {
+        rendererProcessBridge.sendLiveText(
+          `${state.onAir.artist} - ${state.onAir.title}`, { streamingEncoderOnly: true }
+        );
+      } else {
+        rendererProcessBridge.sendLiveText('');
+      }
     },
     setPickedAlbumArtDirectory: (state, action: PayloadAction<string>) => {
       state.settings.pickedAlbumArtDirectory = action.payload;
