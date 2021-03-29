@@ -4,6 +4,8 @@ import { render } from 'react-dom';
 import { AppContainer as ReactHotAppContainer } from 'react-hot-loader';
 import { configuredStore } from './store';
 import RendererProcessBridge from './lib/rendererProcessBridge';
+import * as Sentry from "@sentry/electron";
+Sentry.init({ dsn: "https://d8ee062fad5c494a931fb12caac92e5e@o560549.ingest.sentry.io/5696412" });
 
 import './app.global.css';
 

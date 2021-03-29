@@ -280,6 +280,7 @@
     "@fortawesome/fontawesome-free": "^5.15.0",
     "@hot-loader/react-dom": "^16.13.0",
     "@reduxjs/toolkit": "^1.4.0",
+    "@sentry/electron": "^2.4.0",
     "axios": "^0.21.1",
     "connected-react-router": "^6.6.1",
     "csv-parser": "^3.0.0",

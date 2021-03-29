@@ -15,6 +15,20 @@ import { app, BrowserWindow, ipcMain } from 'electron';
 import log from 'electron-log';
 import MenuBuilder from './menu';
 import initializeBridge from './mainProcessBridge';
+import * as Sentry from "@sentry/electron";
+const axios = require('axios');
+
+Sentry.init({ dsn: "https://d8ee062fad5c494a931fb12caac92e5e@o560549.ingest.sentry.io/5696412" });
+
+axios.interceptors.response.use(
+  (response: any) => {
+    return response;
+  },
+  (error: any) => {
+    Sentry.captureException(error);
+    return Promise.reject(error);
+  }
+);
 
 export default class AppUpdater {
   constructor() {
@@ -54,7 +68,7 @@ const createWindow = async () => {
     process.env.DEBUG_PROD === 'true'
   ) {
     await installExtensions();
-  }
+  }Ø
 
   const RESOURCES_PATH = app.isPackaged
     ? path.join(process.resourcesPath, 'resources')

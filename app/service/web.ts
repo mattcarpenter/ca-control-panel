@@ -43,7 +43,8 @@ export const updateMetdata = (
       '[service/web#updateMetadata] sending metadata',
       path,
       body,
-      hashCreds(opts.auth)
+      username,
+      password
     );
 
     axios
