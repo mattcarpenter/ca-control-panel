@@ -83,7 +83,7 @@ export default function SettingsModal({
             </Form.Field>
 
             <Form.Group inline>
-              <Form.Field>
+              {/*<Form.Field>
                 <label>Website API Username</label>
                 <input
                   placeholder=""
@@ -92,9 +92,9 @@ export default function SettingsModal({
                     setApiUsername(event.target.value)
                   }
                 />
-              </Form.Field>
+              </Form.Field>*/}
               <Form.Field>
-                <label>Website API Password</label>
+                <label>Website API Key</label>
                 <input
                   type="password"
                   placeholder=""

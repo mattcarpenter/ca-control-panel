@@ -33,9 +33,10 @@ export const updateMetdata = (
       album_source: albumSource,
       album_artist: artist,
       album_song: title,
+      api_key: password,
     };
     const opts = {
-      auth: {username, password},
+      //auth: {username, password},
     };
 
     log.silly('[service/web#updateMetadata] mediaTypeImage:', mediaTypeImage);
@@ -68,20 +69,17 @@ export const goOffAir = (
   return new Promise((resolve, reject) => {
     const path = makePath(basePath, UPDATE_SHOW_STATUS_PATH);
     const opts = {
-      auth: {username, password},
+      //auth: {username, password},
     };
 
-    log.info(
-      '[service/web#goOffAir] sending show_is_live 0',
-      path,
-      hashCreds(opts.auth)
-    );
+    log.info('[service/web#goOffAir] sending show_is_live 0', path);
 
     axios
       .post(
         path,
         {
           show_is_live: '0',
+          api_key: password,
         },
         opts
       )
@@ -104,14 +102,13 @@ export const updateLiveText = (
   return new Promise((resolve, reject) => {
     const path = makePath(basePath, UPDATE_LIVETEXT_PATH);
     const opts = {
-      auth: {username, password},
+      //auth: {username, password},
     };
 
     log.info(
       '[service/web#updateLiveText] updating liveText',
       path,
-      text,
-      hashCreds(opts.auth)
+      text
     );
 
     axios
@@ -119,6 +116,7 @@ export const updateLiveText = (
         path,
         {
           live_text: text,
+          api_key: password,
         },
         opts
       )
@@ -136,11 +134,4 @@ function makePath(basePath: string, path: string) {
   return (
     (basePath[basePath.length - 1] === '/' ? basePath : `${basePath}/`) + path
   );
-}
-
-function hashCreds(creds: { username: string; password: string }) {
-  return {
-    username: md5(creds.username),
-    password: md5(creds.password),
-  };
 }
